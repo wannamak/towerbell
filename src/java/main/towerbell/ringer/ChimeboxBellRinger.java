@@ -49,9 +49,9 @@ public class ChimeboxBellRinger extends BellRinger {
 
       GPIOChipInfoProvider gpioManager = new GPIOChipInfoProvider();
       Path gpioDevicePath = gpioManager.getDevicePathForLabel(fixedConfig.getGpioLabel());
-      //Preconditions.checkNotNull(
-      //    gpioDevicePath, "No device for label " + fixedConfig.getGpioLabel());
-
+      if (gpioDevicePath == null) {
+        throw new IOException("No device for label " + fixedConfig.getGpioLabel());
+      }
       relays = new RaspberryRelays(gpioDevicePath);
       relays.initialize();
     } else {
@@ -72,14 +72,15 @@ public class ChimeboxBellRinger extends BellRinger {
   @Override
   protected void endRing() {
     relays.get(currentNote).open();
-    currentNote++;
-    if (currentNote > endNote) {
-      currentNote = startNote;
-    }
   }
 
   @Override
   protected void endRingSequence() {
     relays.get(POWER_RELAY_INDEX).open();
+
+    currentNote++;
+    if (currentNote > endNote) {
+      currentNote = startNote;
+    }
   }
 }

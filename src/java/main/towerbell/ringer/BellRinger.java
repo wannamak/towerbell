@@ -113,9 +113,11 @@ public abstract class BellRinger {
         logger.fine("Begin ring " + (i + 1) + " of " + numRings);
         beginRing();
         threadSleep(scheduledRing.schedule().getRingDurationMillis());
-        logger.fine("End   ring " + (i + 1) + " of " + numRings);
+        logger.fine("End ring " + (i + 1) + " of " + numRings);
         endRing();
-        threadSleep(scheduledRing.schedule().getSilenceDurationMillis());
+        if (i < numRings - 1) {
+          threadSleep(scheduledRing.schedule().getSilenceDurationMillis());
+        }
       }
     } finally {
       endRingSequence();
@@ -131,7 +133,6 @@ public abstract class BellRinger {
       threadSleep(configurationManager.getRingDurationMillis());
       logger.fine("End single ring");
       endRing();
-      threadSleep(configurationManager.getDefaultSilenceDurationMillis());
     } finally {
       endRingSequence();
     }
