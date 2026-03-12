@@ -21,59 +21,14 @@
   <title>Tower Bell</title>
   <link rel="icon" href="/static/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
-  <style>
-@font-face {
-  font-family: 'Roboto';
-  src: url('/static/roboto.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-}
-body {
-  font-family: 'Roboto', sans-serif;
-  font-size: 20px;
-  padding: 0;
-  margin: 0;
-}
-
-.infobox {
-  padding: 1em;
-  border-radius: 1em;
-  border: 2px solid #898989;
-  font-size: 20px;
-}
-
-.ringbutton {
-  padding: 20px 48px;
-  background-color: #555555;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 20px;
-  font-weight: bold;
-  display: inline-block;
-  user-select: none;
-}
-
-.ringbutton:active {
-  background-color: #2a6099;
-  transform: scale(0.97);
-}
-
-.errorMessage {
-  color: red;
-  font-size: 20px;
-}
-  </style>
+  <link rel="stylesheet" href="/static/common.css">
+  <link rel="stylesheet" href="/static/ring.css">
   <script src="/static/xhr.js"></script>
   <script src="/static/ring.js"></script>
 </head>
 <body>
 
-<div style="display: flex; align-items: center; justify-content: flex-start; width: 100%;
-            background-color: #555555; padding: 1em; color: #FFFFFF; box-sizing: border-box;">
-  <img style="height: 100px;" src="/static/logo.png">
-  <div style="margin-left: auto; margin-right: 1em; font-size: 3em;">Tower Bell</div>
-</div>
+$HEADER
 
 <div style="padding-top: 1em; padding-bottom: 1em;"></div>
 

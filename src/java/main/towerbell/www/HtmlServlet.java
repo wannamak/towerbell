@@ -46,6 +46,7 @@ public class HtmlServlet extends HttpServlet {
   private String ringTemplate;
   private String scheduleTemplate;
   private String configTemplate;
+  private String headerInclude;
   private final String templateDirectory;
   private final boolean developmentMode;
   private final ScheduleManager scheduleManager;
@@ -78,6 +79,7 @@ public class HtmlServlet extends HttpServlet {
     ringTemplate = readTemplate("ring-template.html");
     scheduleTemplate = readTemplate("schedule-template.html");
     configTemplate = readTemplate("config-template.html");
+    headerInclude = readTemplate("header.inc");
   }
 
   private String readTemplate(String templateName) throws IOException {
@@ -123,7 +125,8 @@ public class HtmlServlet extends HttpServlet {
         .replace("$1_ADD_OR_EDIT", "Add New")
         .replace("$2_ADD_OR_UPDATE", "Add")
         .replace("$3_ADD_OR_UPDATE_FUNCTION_NAME", "onAdd")
-        .replace("$4_FINAL_SCRIPT", getFinalScriptForAdd());
+        .replace("$4_FINAL_SCRIPT", getFinalScriptForAdd())
+        .replace("$HEADER", headerInclude);
   }
 
   private String expandUpdateTemplate(Schedule schedule) {
@@ -131,7 +134,8 @@ public class HtmlServlet extends HttpServlet {
         .replace("$1_ADD_OR_EDIT", "Edit")
         .replace("$2_ADD_OR_UPDATE", "Update")
         .replace("$3_ADD_OR_UPDATE_FUNCTION_NAME", "onUpdate")
-        .replace("$4_FINAL_SCRIPT", getFinalScriptForEdit(schedule));
+        .replace("$4_FINAL_SCRIPT", getFinalScriptForEdit(schedule))
+        .replace("$HEADER", headerInclude);
   }
 
   private String expandRingTemplate() {
@@ -140,7 +144,8 @@ public class HtmlServlet extends HttpServlet {
 
     return ringTemplate
         .replace("$NOW", timeFormatter.formatZonedDateTime(now))
-        .replace("$NEXT_RING", nextRing);
+        .replace("$NEXT_RING", nextRing)
+        .replace("$HEADER", headerInclude);
   }
 
   private String expandMainTemplate() {
@@ -157,12 +162,14 @@ public class HtmlServlet extends HttpServlet {
         .replace("$NOW", timeFormatter.formatZonedDateTime(now))
         .replace("$NEXT_RING", nextRing)
         .replace("$VERSION", String.format("Version %s", TowerBell.VERSION))
-        .replace("$SILENCE_CHECKED", silenceManager.getLastSilenced() != null ? "checked" : "");
+        .replace("$SILENCE_CHECKED", silenceManager.getLastSilenced() != null ? "checked" : "")
+        .replace("$HEADER", headerInclude);
   }
 
   private String expandConfigTemplate() {
     return configTemplate
-        .replace("$FINAL_SCRIPT", getFinalScriptForConfig());
+        .replace("$FINAL_SCRIPT", getFinalScriptForConfig())
+        .replace("$HEADER", headerInclude);
   }
 
   private String getFinalScriptForConfig() {

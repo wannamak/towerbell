@@ -21,106 +21,14 @@
   <title>Tower Bell</title>
   <link rel="icon" href="/static/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
-  <style>
-@font-face {
-  font-family: 'Roboto';
-  src: url('/static/roboto.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-}
-
-body {
-  font-family: 'Roboto', sans-serif;
-  font-size: 20px;
-  padding: 0;
-  margin: 0;
-}
-
-.table {
-  display: table;
-  border-collapse: collapse;
-}
-
-.row {
-  display: table-row;
-}
-
-.row:not(.footer) .cell {
-  border-bottom: 1px solid #ddd;
-}
-
-.cell {
-  display: table-cell;
-  padding: 8px 16px;  /* vert horiz */
-  vertical-align: middle;
-}
-
-.center {
-  text-align: center;
-}
-
-.checkbox {
-  text-align: center;
-  padding: 8px 0px;  /* vert horiz */
-}
-
-.header .cell {
-  font-weight: bold;
-  background: #eee;
-  border-top: 2px solid #ccc;
-  border-bottom: 2px solid #ccc;
-  border-left: 1px solid #aaa;
-  border-right: 1px solid #aaa;
-}
-
-.footer {
-}
-
-.numrings {
-  width: 5em;
-}
-
-.inputbox {
-  font-size: 20px;
-  padding: 5px;
-}
-
-.button {
-  background-color: #555555;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 40px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.button:hover {
-  background-color: #357abd;
-}
-
-.button:active {
-  background-color: #2a6099;
-}
-
-.errorMessage {
-  color: red;
-  font-size: 20px;
-}
-  </style>
+  <link rel="stylesheet" href="/static/common.css">
+  <link rel="stylesheet" href="/static/config.css">
   <script src="/static/xhr.js"></script>
   <script src="/static/config.js"></script>
 </head>
 <body>
 
-<div style="display: flex; align-items: center; justify-content: flex-start; width: 100%;
-            background-color: #555555; padding: 1em; color: #FFFFFF; box-sizing: border-box;">
-  <img alt="logo" style="height: 100px;" src="/static/logo.png">
-  <div style="margin-left: auto; margin-right: 1em; font-size: 3em;">Tower Bell</div>
-</div>
-
-<div style="padding-top: 1em; padding-bottom: 1em;"></div>
+$HEADER
 
 <form>
   <div style="display: flex; flex-direction: column; gap: 3em; width: fit-content; padding-left: 3em;">

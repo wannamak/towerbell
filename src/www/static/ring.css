@@ -1,0 +1,16 @@
+.ringbutton {
+  padding: 20px 48px;
+  background-color: #555555;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  display: inline-block;
+  user-select: none;
+}
+
+.ringbutton:active {
+  background-color: #2a6099;
+  transform: scale(0.97);
+}
