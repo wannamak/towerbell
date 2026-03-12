@@ -16,10 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
- function onHourlyCheckboxChanged(hourlyCheckbox) {
+
+function onHourlyCheckboxChanged(hourlyCheckbox) {
+  const isSpecifiedElement = document.getElementById("isspecified");
   if (hourlyCheckbox.checked) {
     const numRingsElement = document.getElementById("numrings");
+    savedNumRings = numRingsElement.value;
     numRingsElement.value = "";
+    isSpecifiedElement.checked = false;
+  } else {
+    numRingsElement.value = savedNumRings;
+    isSpecifiedElement.checked = true;
+  }
+}
+
+function onSpecifiedCheckboxChanged(specifiedCheckbox) {
+  const isHourlyElement = document.getElementById("ishourly");
+  if (specifiedCheckbox.checked) {
+    isHourlyElement.checked = false;
+  } else {
+    isHourlyElement.checked = true;
   }
 }
 
@@ -28,9 +44,12 @@ function onNumRingsChanged(numRings) {
     numRings.value = Math.floor(numRings.value / 10)
   }
   if (numRings.value != "") {
-    const hourlyCheckbox = document.getElementById("ishourly");
-    hourlyCheckbox.checked = false;
+    const isSpecifiedElement = document.getElementById("isspecified");
+    isSpecifiedElement.checked = true;
+    const isHourlyElement = document.getElementById("ishourly");
+    isHourlyElement.checked = false;
   }
+  savedNumRings = numRings.value;
 }
 
 function onPeriodChanged(period) {

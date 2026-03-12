@@ -31,10 +31,10 @@
 $HEADER
 
 <form>
-  <div style="display: flex; flex-direction: column; gap: 3em; width: fit-content; padding-left: 3em;">
+  <div style="display: flex; flex-direction: column; width: fit-content; padding-left: 3em;">
     <h2>$1_ADD_OR_EDIT Schedule</h2>
 
-    <div class="table">
+    <div class="table" style="margin-top: 1em; margin-bottom: 2em;">
       <div class="row header">
         <div class="cell center footer"><label for="sunday">S</label></div>
         <div class="cell center"><label for="monday">M</label></div>
@@ -56,7 +56,23 @@ $HEADER
       </div>
     </div>
 
-    <div class="table">
+    <div class="table" style="margin-bottom: 2em;">
+      <div class="row header">
+        <div class="cell"><label for="starthour">At</label></div>
+      </div>
+      <div class="cell">
+        <input id="starthour" name="starthour" type="number" min="0" max="12" class="inputbox"
+               style="width: 5ch;" oninput="onHourChanged(this)">:<input
+          id="startminute" name="startminute" type="number" min="0" max="59" class="inputbox"
+          style="width: 5ch;" oninput="onMinuteChanged(this)"><select
+          id="startampm" name="startampm" class="inputbox">
+        <option value="am">am</option>
+        <option value="pm">pm</option>
+      </select>
+      </div>
+    </div>
+
+    <div class="table" style="margin-bottom: 2em;">
       <div class="row header">
         <div class="cell">Ring</div>
       </div>
@@ -64,7 +80,10 @@ $HEADER
       <div class="row footer">
         <div class="cell">
           <input id="ishourly" name="ishourly" type="checkbox" onchange="onHourlyCheckboxChanged(this)">
-          <label for="ishourly">hourly ring</label> or
+          <label for="ishourly">ring the hour-number</label>; or<br/>
+
+          <input id="isspecified" name="isspecified" type="checkbox" onchange="onSpecifiedCheckboxChanged(this)">
+          ring the specified number of rings:
           <input id="numrings" name="numrings" type="number" min="0" max="999"
                  class="inputbox" style="width: 6ch;" oninput="onNumRingsChanged(this)">
           <label for="numrings">ring(s)</label>
@@ -72,29 +91,21 @@ $HEADER
       </div>
     </div>
 
-    <div class="table">
+    <span style="display: flex; justify-content: center; margin-bottom: 5px; /* short */; color: #676767;">
+      Optional
+    </span>
+
+    <div class="table" style="margin-bottom: 2em;">
       <div class="row header">
-        <div class="cell"><label for="periodminutes">Every</label></div>
-        <div class="cell"><label for="starthour">Start</label></div>
-        <div class="cell"><label for="endhour">End</label></div>
+        <div class="cell"><label for="periodminutes">Repeat every</label></div>
+        <div class="cell"><label for="endhour">Until</label></div>
       </div>
 
       <div class="row footer">
         <div class="cell">
           <input id="periodminutes" name="periodminutes" type="number" min="0" max="1440" class="inputbox"
                  style="width: 7ch;" oninput="onPeriodChanged(this)">
-          minutes
-        </div>
-
-        <div class="cell">
-          <input id="starthour" name="starthour" type="number" min="0" max="12" class="inputbox"
-                 style="width: 5ch;" oninput="onHourChanged(this)">:<input
-            id="startminute" name="startminute" type="number" min="0" max="59" class="inputbox"
-            style="width: 5ch;" oninput="onMinuteChanged(this)"><select
-            id="startampm" name="startampm" class="inputbox">
-          <option value="am">am</option>
-          <option value="pm">pm</option>
-        </select>
+          minute(s)
         </div>
 
         <div class="cell">
@@ -111,16 +122,16 @@ $HEADER
       </div>
     </div>
 
-    <div class="table">
+    <div class="table" style="margin-bottom: 2em;">
       <div class="row header">
-        <div class="cell"><label for="silence">Silence Between Rings</label></div>
+        <div class="cell"><label for="silence">Silence Between Successive Rings</label></div>
       </div>
 
       <div class="row footer">
         <div class="cell">
           <input id="silence" name="silence" type="number" min="0" max="999"
                  class="inputbox" style="width: 6ch;" oninput="onSilenceChanged(this)">
-          seconds
+          second(s)
         </div>
       </div>
     </div>
@@ -143,6 +154,8 @@ $HEADER
 
 <script lang="javascript">
 $4_FINAL_SCRIPT
+const numRingsElement = document.getElementById("numrings");
+savedNumRings = numRingsElement.value;
 </script>
 
 </body>

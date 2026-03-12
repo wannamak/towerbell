@@ -205,6 +205,7 @@ public class HtmlServlet extends HttpServlet {
     if (schedule.isHourlyRing()) {
       result.append("document.getElementById('ishourly').checked = true;\n");
     } else if (schedule.getNumRings() > 0) {
+      result.append("document.getElementById('isspecified').checked = true;\n");
       result.append(
           String.format("document.getElementById('numrings').value = '%d';\n",
               schedule.getNumRings()));
@@ -229,6 +230,7 @@ public class HtmlServlet extends HttpServlet {
     result.append(
         String.format("document.getElementById('scheduleid').value = '%d';\n",
             schedule.getScheduleId()));
+
     return result.toString();
   }
 
