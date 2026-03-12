@@ -38,7 +38,7 @@ public class ChimeboxBellRinger extends BellRinger {
 
   private Relays relays;
   private static final int POWER_RELAY_INDEX = 0;
-  private static final List<Integer> NOTES = List.of(3, 4, 5, 6, 8, 9);
+  private static final List<Integer> NOTES = List.of(4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
   private int currentNote = -1;
   private final List<Integer> currentNotes = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class ChimeboxBellRinger extends BellRinger {
   protected void beginRingSequence() {
     relays.get(POWER_RELAY_INDEX).close();
     if (currentNotes.isEmpty()) {
-      Collections.copy(currentNotes, NOTES);
+      currentNotes.addAll(NOTES);
     }
     currentNote = currentNotes.remove(new SecureRandom().nextInt(currentNotes.size()));
   }
