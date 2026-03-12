@@ -32,7 +32,7 @@ $HEADER
 
 <div style="display: flex; justify-content: center; flex-direction: column; align-items: center; gap: 3em;">
   <div class="infobox">
-    Current time: $NOW<br/>
+    Current time: <span id="clock">$NOW</span><br/>
     Next ring: $NEXT_RING
   </div>
 
@@ -95,6 +95,17 @@ $HEADER
     <a target="_blank" href="https://github.com/wannamak/towerbell/">https://github.com/wannamak/towerbell/</a>
   </div>
 </div>
+
+<script lang="javascript">
+const serverNow = new Date("$ISO_NOW");
+const clientNow = new Date();
+const offset = serverNow - clientNow; // difference in ms
+
+const el = document.getElementById('clock');
+setInterval(() => {
+  el.textContent = formatDateTime(new Date(Date.now() + offset));
+}, 1000);
+</script>
 
 </body>
 </html>

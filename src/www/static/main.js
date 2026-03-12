@@ -45,3 +45,11 @@ function onSilentChanged(silentInput) {
     }
   });
 }
+
+function formatDateTime(date) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long', day: 'numeric', year: 'numeric',
+    hour: 'numeric', minute: '2-digit', second: '2-digit',
+    timeZoneName: 'short'
+  }).format(date).replace(' AM', 'am').replace(' PM', 'pm').replace(' at ', ' ');
+}

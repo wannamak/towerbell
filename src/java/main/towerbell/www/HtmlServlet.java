@@ -38,6 +38,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.logging.Logger;
 
 public class HtmlServlet extends HttpServlet {
@@ -144,6 +146,9 @@ public class HtmlServlet extends HttpServlet {
 
     return ringTemplate
         .replace("$NOW", timeFormatter.formatZonedDateTime(now))
+        .replace("$ISO_NOW",
+            now.truncatedTo(ChronoUnit.SECONDS)
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
         .replace("$NEXT_RING", nextRing)
         .replace("$HEADER", headerInclude);
   }
@@ -160,6 +165,9 @@ public class HtmlServlet extends HttpServlet {
     return mainTemplate
         .replace("$SCHEDULE", allSchedules.toString())
         .replace("$NOW", timeFormatter.formatZonedDateTime(now))
+        .replace("$ISO_NOW",
+            now.truncatedTo(ChronoUnit.SECONDS)
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
         .replace("$NEXT_RING", nextRing)
         .replace("$VERSION", String.format("Version %s", TowerBell.VERSION))
         .replace("$SILENCE_CHECKED", silenceManager.getLastSilenced() != null ? "checked" : "")
