@@ -1,0 +1,28 @@
+Towerbell
+Copyright (c) 2025 Wannamaker Consulting LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+--------------------------------------------------------------------------------
+This product/distribution dynamically links to and includes portions of:
+
+libgpiod[](https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/)
+Copyright (c) 2017-2025 Bartosz Golaszewski <brgl@bgdev.pl> and other contributors
+
+libgpiod is licensed under the GNU Lesser General Public License v2.1 or later.
+See the file LGPL-2.1.txt (or https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt)
+for the full license text.
+
+The complete corresponding source code for libgpiod (version 2.2.3 used during build)
+is available at: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git
+(or contact us at keith@wannamaker.org within 3 years to obtain a copy on physical media).

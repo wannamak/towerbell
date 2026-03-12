@@ -1,0 +1,100 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html>
+<head>
+  <title>Tower Bell</title>
+  <link rel="icon" href="/static/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+  <style>
+@font-face {
+  font-family: 'Roboto';
+  src: url('/static/roboto.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+.infobox {
+  padding: 1em;
+  border-radius: 1em;
+  border: 2px solid #898989;
+  font-size: 20px;
+}
+
+.ringbutton {
+  padding: 20px 48px;
+  background-color: #555555;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  display: inline-block;
+  user-select: none;
+}
+
+.ringbutton:active {
+  background-color: #2a6099;
+  transform: scale(0.97);
+}
+
+.errorMessage {
+  color: red;
+  font-size: 20px;
+}
+  </style>
+  <script src="/static/xhr.js"></script>
+  <script src="/static/ring.js"></script>
+</head>
+<body>
+
+<div style="display: flex; align-items: center; justify-content: flex-start; width: 100%;
+            background-color: #555555; padding: 1em; color: #FFFFFF;">
+  <img style="height: 100px;" src="/static/fpc-logo.png">
+  <div style="margin-left: auto; margin-right: 1em; font-size: 3em;">Tower Bell</div>
+</div>
+
+<div style="padding-top: 1em; padding-bottom: 1em;"></div>
+
+<div style="display: flex; justify-content: center; flex-direction: column; align-items: center; gap: 3em;">
+  <div class="infobox">
+    Current time: $NOW<br/>
+    Next ring: $NEXT_RING
+  </div>
+
+  <div>
+    <div class="ringbutton" onclick="onRing();">R I N G</div>
+  </div>
+
+  <div>
+    <div class="errormessage" id="errorMessage"></div>
+  </div>
+
+  <div>
+    <a href="/">Back</a>
+  </div>
+</div>
+
+</body>
+</html>

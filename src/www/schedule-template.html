@@ -1,0 +1,241 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html lang="en">
+<head>
+  <title>Tower Bell</title>
+  <link rel="icon" href="/static/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+  <style>
+@font-face {
+  font-family: 'Roboto';
+  src: url('/static/roboto.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+.table {
+  display: table;
+  border-collapse: collapse;
+}
+
+.row {
+  display: table-row;
+}
+
+.row:not(.footer) .cell {
+  border-bottom: 1px solid #ddd;
+}
+
+.cell {
+  display: table-cell;
+  padding: 8px 16px;  /* vert horiz */
+  vertical-align: middle;
+}
+
+.center {
+  text-align: center;
+}
+
+.checkbox {
+  text-align: center;
+  padding: 8px 0px;  /* vert horiz */
+}
+
+.header .cell {
+  font-weight: bold;
+  background: #eee;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+}
+
+.footer {
+}
+
+.numrings {
+  width: 5em;
+}
+
+.inputbox {
+  font-size: 20px;
+  padding: 5px;
+}
+
+.button {
+  background-color: #555555;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 40px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #357abd;
+}
+
+.button:active {
+  background-color: #2a6099;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 20px;
+}
+  </style>
+  <script src="/static/xhr.js"></script>
+  <script src="/static/schedule.js"></script>
+</head>
+<body>
+
+<div style="display: flex; align-items: center; justify-content: flex-start; width: 100%;
+            background-color: #555555; padding: 1em; color: #FFFFFF;">
+  <img alt="logo" style="height: 100px;" src="/static/fpc-logo.png">
+  <div style="margin-left: auto; margin-right: 1em; font-size: 3em;">Tower Bell</div>
+</div>
+
+<div style="padding-top: 1em; padding-bottom: 1em;"></div>
+
+<form>
+  <div style="display: flex; flex-direction: column; gap: 3em; width: fit-content; padding-left: 3em;">
+    <h2>$1_ADD_OR_EDIT Schedule</h2>
+
+    <div class="table">
+      <div class="row header">
+        <div class="cell center footer"><label for="sunday">S</label></div>
+        <div class="cell center"><label for="monday">M</label></div>
+        <div class="cell center"><label for="tuesday">T</label></div>
+        <div class="cell center"><label for="wednesday">W</label></div>
+        <div class="cell center"><label for="thursday">T</label></div>
+        <div class="cell center"><label for="friday">F</label></div>
+        <div class="cell center"><label for="saturday">S</label></div>
+      </div>
+
+      <div class="row footer">
+        <div class="cell checkbox"><input id="sunday" name="sunday" type="checkbox"></div>
+        <div class="cell checkbox"><input id="monday" name="monday" type="checkbox"></div>
+        <div class="cell checkbox"><input id="tuesday" name="tuesday" type="checkbox"></div>
+        <div class="cell checkbox"><input id="wednesday" name="wednesday" type="checkbox"></div>
+        <div class="cell checkbox"><input id="thursday" name="thursday" type="checkbox"></div>
+        <div class="cell checkbox"><input id="friday" name="friday" type="checkbox"></div>
+        <div class="cell checkbox"><input id="saturday" name="saturday" type="checkbox"></div>
+      </div>
+    </div>
+
+    <div class="table">
+      <div class="row header">
+        <div class="cell">Ring</div>
+      </div>
+
+      <div class="row footer">
+        <div class="cell">
+          <input id="ishourly" name="ishourly" type="checkbox" onchange="onHourlyCheckboxChanged(this)">
+          <label for="ishourly">hourly ring</label> or
+          <input id="numrings" name="numrings" type="number" min="0" max="999"
+                 class="inputbox" style="width: 6ch;" oninput="onNumRingsChanged(this)">
+          <label for="numrings">ring(s)</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="table">
+      <div class="row header">
+        <div class="cell"><label for="periodminutes">Every</label></div>
+        <div class="cell"><label for="starthour">Start</label></div>
+        <div class="cell"><label for="endhour">End</label></div>
+      </div>
+
+      <div class="row footer">
+        <div class="cell">
+          <input id="periodminutes" name="periodminutes" type="number" min="0" max="1440" class="inputbox"
+                 style="width: 7ch;" oninput="onPeriodChanged(this)">
+          minutes
+        </div>
+
+        <div class="cell">
+          <input id="starthour" name="starthour" type="number" min="0" max="12" class="inputbox"
+                 style="width: 5ch;" oninput="onHourChanged(this)">:<input
+            id="startminute" name="startminute" type="number" min="0" max="59" class="inputbox"
+            style="width: 5ch;" oninput="onMinuteChanged(this)"><select
+            id="startampm" name="startampm" class="inputbox">
+          <option value="am">am</option>
+          <option value="pm">pm</option>
+        </select>
+        </div>
+
+        <div class="cell">
+          <input id="endhour" name="endhour" type="number" min="0" max="12" class="inputbox"
+                 style="width: 5ch;" oninput="onHourChanged(this)">:<input
+            id="endminute" name="endminute" type="number" min="0" max="59" class="inputbox"
+            style="width: 5ch;" oninput="onMinuteChanged(this)"><select
+            id="endampm" name="endampm" class="inputbox">
+          <option value=""></option>
+          <option value="am">am</option>
+          <option value="pm">pm</option>
+        </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="table">
+      <div class="row header">
+        <div class="cell"><label for="silence">Silence Between Rings</label></div>
+      </div>
+
+      <div class="row footer">
+        <div class="cell">
+          <input id="silence" name="silence" type="number" min="0" max="999"
+                 class="inputbox" style="width: 6ch;" oninput="onSilenceChanged(this)">
+          seconds
+        </div>
+      </div>
+    </div>
+
+    <div class="table">
+      <div class="row footer">
+        <div class="cell errormessage" id="errorMessage"></div>
+      </div>
+      <div class="row footer">
+        <div class="cell">
+          <input type="button" value="$2_ADD_OR_UPDATE" class="button" onclick="$3_ADD_OR_UPDATE_FUNCTION_NAME();">
+          <span style="padding-left: 3em;">&nbsp;</span>
+          <input type="button" value="Cancel" class="button" onclick="onCancel();">
+        </div>
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="scheduleid" id="scheduleid" value="">
+</form>
+
+<script lang="javascript">
+$4_FINAL_SCRIPT
+</script>
+
+</body>
+</html>

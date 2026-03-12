@@ -1,0 +1,15 @@
+[Unit]
+Description=TowerBell
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=ubuntu
+ExecStart=/home/ubuntu/towerbell.sh
+WorkingDirectory=/home/ubuntu
+
+[Install]
+WantedBy=multi-user.target

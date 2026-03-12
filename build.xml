@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="towerbell" default="jar" basedir=".">
+  <property name="classes-destination" location="bin/main" />
+  <property name="tests-destination" location="bin/test" />
+  <property name="release-destination" location="bin/release" />
+  <property name="test-output" location="/tmp" />
+  <property name="towerbell-version" value="1.0" />
+  <property name="release-layout" location="${release-destination}/towerbell-${towerbell-version}" />
+  <property name="jars-destination" location="${release-layout}/lib" />
+
+  <path id="jars">
+    <fileset dir="lib" includes="*.jar" />
+  </path>
+
+  <path id="test-jars">
+    <fileset dir="lib/tests" includes="*.jar" />
+  </path>
+
+  <!--== Targets =====================================================-->
+
+  <available file="/usr/bin/protoc" type="file" property="protoc" value="/usr/bin/protoc" />
+
+  <target name="proto">
+      <exec executable="${protoc}">
+          <arg value="--java_out=src/java/main"/>
+          <arg value="src/proto/towerbell.proto"/>
+      </exec>
+  </target>
+
+  <target name="build" depends="proto" >
+    <mkdir dir="${classes-destination}" />
+    <mkdir dir="${tests-destination}" />
+
+    <javac includeantruntime="false" srcdir="src/java/main" destdir="${classes-destination}"
+           debug="on" includes="**/*.java">
+      <classpath>
+        <path refid="jars" />
+      </classpath>
+    </javac>
+
+    <javac includeantruntime="false" srcdir="src/java/test" destdir="${tests-destination}"
+           debug="on" includes="**/*.java">
+      <classpath>
+        <path refid="jars" />
+        <path refid="test-jars" />
+        <pathelement location="${classes-destination}" />
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="jar" depends="build">
+    <jar destfile="${jars-destination}/towerbell.jar"
+    	  basedir="${classes-destination}">
+      <include name="**/*.class" />
+    </jar>
+  </target>
+
+  <target name="release" depends="jar">
+    <mkdir dir="${release-layout}/www" />
+    <copy todir="${release-layout}/www">
+      <fileset dir="src/www" />
+    </copy>
+    <copy todir="${release-layout}/lib">
+      <fileset dir="lib" includes="*.jar" />
+      <file file="libgpiod2/libgpiod.so.3.1.2" />
+      <file file="bin/libtowerbell.so" />
+    </copy>
+    <copy todir="${release-layout}">
+      <file file="scripts/towerbell.sh"/>
+      <file file="NOTICE"/>
+      <file file="LICENSE"/>
+    </copy>
+    <zip destfile="towerbell-${towerbell-version}.zip">
+      <fileset dir="bin/release" />
+    </zip>
+  </target>
+	
+  <target name="clean">
+      <delete dir="bin" />
+  </target>
+
+  <target name="test" depends="build">
+    <junitlauncher printsummary="true">
+      <classpath>
+        <path refid="jars" />
+        <path refid="test-jars" />
+        <pathelement location="${tests-destination}" />
+        <pathelement location="${classes-destination}" />
+      </classpath>
+      <testclasses outputdir="${test-output}">
+        <fileset dir="${tests-destination}">
+          <include name="**/*Test.class"/>
+        </fileset>
+        <listener type="legacy-plain"/>
+      </testclasses>
+    </junitlauncher>
+  </target>
+
+  <target name="towerbell" depends="build">
+      <java classname="towerbell.TowerBell" fork="true">
+      <classpath>
+        <path refid="jars"/>
+        <path location="${classes-destination}"/>
+      </classpath>
+      <sysproperty key="java.util.logging.config.file" value="logging.properties"/>
+      <arg value="config.txt" />
+    </java>
+  </target>
+
+</project>
+
