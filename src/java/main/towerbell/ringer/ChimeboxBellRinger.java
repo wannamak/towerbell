@@ -28,16 +28,19 @@ import towerbell.pi.physical.GPIOChipInfoProvider;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class ChimeboxBellRinger extends BellRinger {
   private final Logger logger = Logger.getLogger(ChimeboxBellRinger.class.getName());
 
   private Relays relays;
-  private final int startNote = 3;
-  private final int endNote = 7;
-  private int currentNote = 3 + new SecureRandom().nextInt(4);
   private static final int POWER_RELAY_INDEX = 0;
+  private static final List<Integer> NOTES = List.of(3, 4, 5, 6, 8, 9);
+  private int currentNote = -1;
+  private final List<Integer> currentNotes = new ArrayList<>();
 
   public ChimeboxBellRinger(
       Proto.FixedConfig fixedConfig,
@@ -62,6 +65,10 @@ public class ChimeboxBellRinger extends BellRinger {
   @Override
   protected void beginRingSequence() {
     relays.get(POWER_RELAY_INDEX).close();
+    if (currentNotes.isEmpty()) {
+      Collections.copy(currentNotes, NOTES);
+    }
+    currentNote = currentNotes.remove(new SecureRandom().nextInt(currentNotes.size()));
   }
 
   @Override
@@ -77,10 +84,5 @@ public class ChimeboxBellRinger extends BellRinger {
   @Override
   protected void endRingSequence() {
     relays.get(POWER_RELAY_INDEX).open();
-
-    currentNote++;
-    if (currentNote > endNote) {
-      currentNote = startNote;
-    }
   }
 }
