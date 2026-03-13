@@ -16,8 +16,8 @@ if (nextRingOverrideString) {
   countdownElement.textContent = nextRingOverrideString;
 } else if (isoNextRingString) {
   const targetTime = new Date(isoNextRingString);
-  countdownElement.textContent = timeBetween(targetTime, offset);
+  countdownElement.textContent = numRingsString + timeBetween(targetTime, offset);
   setInterval(() => {
-    countdownElement.textContent = timeBetween(targetTime, offset);
+    countdownElement.textContent = numRingsString + timeBetween(targetTime, offset);
   }, 1000);
 }

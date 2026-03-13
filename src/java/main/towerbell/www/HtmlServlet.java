@@ -170,6 +170,7 @@ public class HtmlServlet extends HttpServlet {
     ZonedDateTime nextRing = (nextScheduledRing != null && nextScheduledRing.ringTime() != null) ?
         nextScheduledRing.ringTime() : null;
     String nextRingOverrideString = getNextRingOverrideString(nextScheduledRing);
+    String nextRingNumRingsString = getNextRingNumRingsString(nextScheduledRing);
 
     return template
         .replace("$ISO_NOW",
@@ -180,7 +181,9 @@ public class HtmlServlet extends HttpServlet {
                 nextRing.truncatedTo(ChronoUnit.SECONDS)
                     .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
         .replace("$NEXT_RING_OVERRIDE_STRING_MAYBE_EMPTY",
-            nextRingOverrideString == null ? "" : nextRingOverrideString);
+            nextRingOverrideString == null ? "" : nextRingOverrideString)
+        .replace("$NEXT_RING_NUM_RINGS",
+            nextRingNumRingsString == null ? "" : nextRingNumRingsString);
   }
 
   private String getFinalScriptForConfig() {
@@ -269,6 +272,18 @@ public class HtmlServlet extends HttpServlet {
     }
     if (nextRing == null || nextRing.ringTime() == null) {
       return "No rings scheduled";
+    } else {
+      return null;
+    }
+  }
+
+  private String getNextRingNumRingsString(ScheduledRing nextRing) {
+    if (nextRing == null || nextRing.schedule() == null) {
+      return null;
+    } else if (nextRing.schedule().isHourlyRing() && nextRing.ringTime() != null) {
+      return String.format("%d rings in ", nextRing.ringTime().getHour() % 12);
+    } else if (nextRing.schedule().getNumRings() > 0) {
+      return String.format("%d rings in ", nextRing.schedule().getNumRings());
     } else {
       return null;
     }
