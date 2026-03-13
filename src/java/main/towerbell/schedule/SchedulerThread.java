@@ -55,7 +55,7 @@ public class SchedulerThread extends Thread implements DatabaseUpdateListener {
     while (true) {
       ScheduledRing nextRing = scheduleManager.getNextRing();
 
-      if (nextRing == null) {
+      if (nextRing == null || nextRing.ringTime() == null) {
         synchronized (lock) {
           logger.info("No schedules found.  Waiting forever.");
           try {
