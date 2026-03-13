@@ -141,15 +141,7 @@ public class HtmlServlet extends HttpServlet {
   }
 
   private String expandRingTemplate() {
-    ZonedDateTime now = ZonedDateTime.now();
-    String nextRing = getNextRingString(now);
-
-    return ringTemplate
-        .replace("$NOW", timeFormatter.formatZonedDateTime(now))
-        .replace("$ISO_NOW",
-            now.truncatedTo(ChronoUnit.SECONDS)
-                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-        .replace("$NEXT_RING", nextRing)
+    return expandInfoBox(ringTemplate)
         .replace("$HEADER", headerInclude);
   }
 
@@ -159,16 +151,8 @@ public class HtmlServlet extends HttpServlet {
       allSchedules.append(scheduleFormatter.format(schedule));
     }
 
-    ZonedDateTime now = ZonedDateTime.now();
-    String nextRing = getNextRingString(now);
-
-    return mainTemplate
+    return expandInfoBox(mainTemplate)
         .replace("$SCHEDULE", allSchedules.toString())
-        .replace("$NOW", timeFormatter.formatZonedDateTime(now))
-        .replace("$ISO_NOW",
-            now.truncatedTo(ChronoUnit.SECONDS)
-                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-        .replace("$NEXT_RING", nextRing)
         .replace("$VERSION", String.format("Version %s", TowerBell.VERSION))
         .replace("$SILENCE_CHECKED", silenceManager.getLastSilenced() != null ? "checked" : "")
         .replace("$HEADER", headerInclude);
@@ -178,6 +162,25 @@ public class HtmlServlet extends HttpServlet {
     return configTemplate
         .replace("$FINAL_SCRIPT", getFinalScriptForConfig())
         .replace("$HEADER", headerInclude);
+  }
+
+  private String expandInfoBox(String template) {
+    ZonedDateTime now = ZonedDateTime.now();
+    ScheduledRing nextScheduledRing = scheduleManager.getNextRing();
+    ZonedDateTime nextRing = (nextScheduledRing != null && nextScheduledRing.ringTime() != null) ?
+        nextScheduledRing.ringTime() : null;
+    String nextRingOverrideString = getNextRingOverrideString(nextScheduledRing);
+
+    return template
+        .replace("$ISO_NOW",
+            now.truncatedTo(ChronoUnit.SECONDS)
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
+        .replace("$ISO_NEXT_RING_MAYBE_EMPTY",
+            nextRing == null ? "" :
+                nextRing.truncatedTo(ChronoUnit.SECONDS)
+                    .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
+        .replace("$NEXT_RING_OVERRIDE_STRING_MAYBE_EMPTY",
+            nextRingOverrideString == null ? "" : nextRingOverrideString);
   }
 
   private String getFinalScriptForConfig() {
@@ -259,16 +262,15 @@ public class HtmlServlet extends HttpServlet {
             isAm ? "am" : "pm"));
   }
 
-  private String getNextRingString(ZonedDateTime now) {
+  private String getNextRingOverrideString(ScheduledRing nextRing) {
     ZonedDateTime lastSilenced = silenceManager.getLastSilenced();
     if (lastSilenced != null) {
       return "Silenced since " + timeFormatter.formatZonedDateTime(lastSilenced);
     }
-    ScheduledRing nextRing = scheduleManager.getNextRing();
-    if (nextRing == null) {
+    if (nextRing == null || nextRing.ringTime() == null) {
       return "No rings scheduled";
     } else {
-      return timeFormatter.timeBetween(now, nextRing.ringTime());
+      return null;
     }
   }
 }

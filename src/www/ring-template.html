@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="/static/ring.css">
   <script src="/static/xhr.js"></script>
   <script src="/static/ring.js"></script>
+  <script src="/static/time.js"></script>
 </head>
 <body>
 
@@ -34,8 +35,8 @@ $HEADER
 
 <div style="display: flex; justify-content: center; flex-direction: column; align-items: center; gap: 3em;">
   <div class="infobox">
-    Current time: <span id="clock">$NOW</span><br/>
-    Next ring: $NEXT_RING
+    Current time: <span id="clock"></span><br/>
+    Next ring: <span id="countdown"></span><br/>
   </div>
 
   <div>
@@ -52,15 +53,11 @@ $HEADER
 </div>
 
 <script lang="javascript">
-  const serverNow = new Date("$ISO_NOW");
-  const clientNow = new Date();
-  const offset = serverNow - clientNow; // difference in ms
-
-  const el = document.getElementById('clock');
-  setInterval(() => {
-    el.textContent = formatDateTime(new Date(Date.now() + offset));
-  }, 1000);
+const serverNow = new Date("$ISO_NOW");
+const isoNextRingString = "$ISO_NEXT_RING_MAYBE_EMPTY";
+const nextRingOverrideString = "$NEXT_RING_OVERRIDE_STRING_MAYBE_EMPTY";
 </script>
+<script src="/static/infobox.js"></script>
 
 </body>
 </html>
