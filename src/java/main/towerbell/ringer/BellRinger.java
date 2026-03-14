@@ -110,6 +110,10 @@ public abstract class BellRinger {
           ? scheduledRing.ringTime().getHour() % 12
           : scheduledRing.schedule().getNumRings();
       for (int i = 0; i < numRings; i++) {
+        if (silenceManager.isSilenced()) {
+          logger.fine("The bell is silenced.");
+          return Result.failure("The bell is silenced.");
+        }
         logger.fine("Begin ring " + (i + 1) + " of " + numRings);
         beginRing();
         threadSleep(scheduledRing.schedule().getRingDurationMillis());
