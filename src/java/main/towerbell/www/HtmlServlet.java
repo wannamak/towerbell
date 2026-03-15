@@ -256,7 +256,7 @@ public class HtmlServlet extends HttpServlet {
     boolean isAm = time.getHour() < 12;
     int hour = time.getHour() % 12;
     builder.append(
-        String.format("document.getElementById('%s').value = '%02d';\n", hourField, hour));
+        String.format("document.getElementById('%s').value = '%d';\n", hourField, hour));
     builder.append(
         String.format("document.getElementById('%s').value = '%02d';\n", minuteField,
             time.getMinute()));

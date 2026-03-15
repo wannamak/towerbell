@@ -31,7 +31,7 @@ public class ScheduleFormatter {
       DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY,
       DayOfWeek.SATURDAY);
   public static final DateTimeFormatter localTimeFormatter =
-      DateTimeFormatter.ofPattern("hh:mma", Locale.ENGLISH);
+      DateTimeFormatter.ofPattern("h:mma", Locale.ENGLISH);
 
   public String format(Schedule schedule) {
     StringBuilder sb = new StringBuilder();
@@ -43,6 +43,10 @@ public class ScheduleFormatter {
               schedule.getDaysOfWeek().contains(dayOfWeek) ? "checked" : ""));
     }
 
+    sb.append("  <div class=\"cell\" style=\"text-align: right;\">");
+    sb.append(formatLocalTime(schedule.getStartTime()));
+    sb.append("</div>\n");
+
     sb.append("  <div class=\"cell\">");
     if (schedule.getNumRings() > 0) {
       int numRings = schedule.getNumRings();
@@ -52,7 +56,7 @@ public class ScheduleFormatter {
         sb.append("s");
       }
     } else if (schedule.isHourlyRing()) {
-      sb.append("hourly ring");
+      sb.append("hour-number");
     }
     sb.append("</div>\n");
 
@@ -62,11 +66,7 @@ public class ScheduleFormatter {
     }
     sb.append("</div>\n");
 
-    sb.append("  <div class=\"cell\">");
-    sb.append(formatLocalTime(schedule.getStartTime()));
-    sb.append("</div>\n");
-
-    sb.append("  <div class=\"cell\">");
+    sb.append("  <div class=\"cell\" style=\"text-align: right;\">");
     if (schedule.getEndTime() != null) {
       sb.append(formatLocalTime(schedule.getEndTime()));
     }
