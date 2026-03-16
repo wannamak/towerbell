@@ -149,6 +149,23 @@ public final class Proto {
      * @return The gpioLogicalPin.
      */
     int getGpioLogicalPin();
+
+    /**
+     * <code>optional string ringer_classname = 9;</code>
+     * @return Whether the ringerClassname field is set.
+     */
+    boolean hasRingerClassname();
+    /**
+     * <code>optional string ringer_classname = 9;</code>
+     * @return The ringerClassname.
+     */
+    java.lang.String getRingerClassname();
+    /**
+     * <code>optional string ringer_classname = 9;</code>
+     * @return The bytes for ringerClassname.
+     */
+    com.google.protobuf.ByteString
+        getRingerClassnameBytes();
   }
   /**
    * <pre>
@@ -171,6 +188,7 @@ public final class Proto {
       gpioLabel_ = "";
       templateDirectory_ = "";
       staticFileDirectory_ = "";
+      ringerClassname_ = "";
     }
 
     @java.lang.Override
@@ -491,6 +509,55 @@ public final class Proto {
       return gpioLogicalPin_;
     }
 
+    public static final int RINGER_CLASSNAME_FIELD_NUMBER = 9;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object ringerClassname_ = "";
+    /**
+     * <code>optional string ringer_classname = 9;</code>
+     * @return Whether the ringerClassname field is set.
+     */
+    @java.lang.Override
+    public boolean hasRingerClassname() {
+      return ((bitField0_ & 0x00000100) != 0);
+    }
+    /**
+     * <code>optional string ringer_classname = 9;</code>
+     * @return The ringerClassname.
+     */
+    @java.lang.Override
+    public java.lang.String getRingerClassname() {
+      java.lang.Object ref = ringerClassname_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          ringerClassname_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string ringer_classname = 9;</code>
+     * @return The bytes for ringerClassname.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getRingerClassnameBytes() {
+      java.lang.Object ref = ringerClassname_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ringerClassname_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -529,6 +596,9 @@ public final class Proto {
       if (((bitField0_ & 0x00000080) != 0)) {
         output.writeInt32(8, gpioLogicalPin_);
       }
+      if (((bitField0_ & 0x00000100) != 0)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, ringerClassname_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -565,6 +635,9 @@ public final class Proto {
       if (((bitField0_ & 0x00000080) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(8, gpioLogicalPin_);
+      }
+      if (((bitField0_ & 0x00000100) != 0)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, ringerClassname_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -621,6 +694,11 @@ public final class Proto {
         if (getGpioLogicalPin()
             != other.getGpioLogicalPin()) return false;
       }
+      if (hasRingerClassname() != other.hasRingerClassname()) return false;
+      if (hasRingerClassname()) {
+        if (!getRingerClassname()
+            .equals(other.getRingerClassname())) return false;
+      }
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -665,6 +743,10 @@ public final class Proto {
       if (hasGpioLogicalPin()) {
         hash = (37 * hash) + GPIO_LOGICAL_PIN_FIELD_NUMBER;
         hash = (53 * hash) + getGpioLogicalPin();
+      }
+      if (hasRingerClassname()) {
+        hash = (37 * hash) + RINGER_CLASSNAME_FIELD_NUMBER;
+        hash = (53 * hash) + getRingerClassname().hashCode();
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -807,6 +889,7 @@ public final class Proto {
         staticFileDirectory_ = "";
         developmentMode_ = false;
         gpioLogicalPin_ = 0;
+        ringerClassname_ = "";
         return this;
       }
 
@@ -872,6 +955,10 @@ public final class Proto {
         if (((from_bitField0_ & 0x00000080) != 0)) {
           result.gpioLogicalPin_ = gpioLogicalPin_;
           to_bitField0_ |= 0x00000080;
+        }
+        if (((from_bitField0_ & 0x00000100) != 0)) {
+          result.ringerClassname_ = ringerClassname_;
+          to_bitField0_ |= 0x00000100;
         }
         result.bitField0_ |= to_bitField0_;
       }
@@ -952,6 +1039,11 @@ public final class Proto {
         if (other.hasGpioLogicalPin()) {
           setGpioLogicalPin(other.getGpioLogicalPin());
         }
+        if (other.hasRingerClassname()) {
+          ringerClassname_ = other.ringerClassname_;
+          bitField0_ |= 0x00000100;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -1018,6 +1110,11 @@ public final class Proto {
                 bitField0_ |= 0x00000080;
                 break;
               } // case 64
+              case 74: {
+                ringerClassname_ = input.readBytes();
+                bitField0_ |= 0x00000100;
+                break;
+              } // case 74
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -1554,6 +1651,86 @@ public final class Proto {
         onChanged();
         return this;
       }
+
+      private java.lang.Object ringerClassname_ = "";
+      /**
+       * <code>optional string ringer_classname = 9;</code>
+       * @return Whether the ringerClassname field is set.
+       */
+      public boolean hasRingerClassname() {
+        return ((bitField0_ & 0x00000100) != 0);
+      }
+      /**
+       * <code>optional string ringer_classname = 9;</code>
+       * @return The ringerClassname.
+       */
+      public java.lang.String getRingerClassname() {
+        java.lang.Object ref = ringerClassname_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ringerClassname_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string ringer_classname = 9;</code>
+       * @return The bytes for ringerClassname.
+       */
+      public com.google.protobuf.ByteString
+          getRingerClassnameBytes() {
+        java.lang.Object ref = ringerClassname_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ringerClassname_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string ringer_classname = 9;</code>
+       * @param value The ringerClassname to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRingerClassname(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        ringerClassname_ = value;
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ringer_classname = 9;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRingerClassname() {
+        ringerClassname_ = getDefaultInstance().getRingerClassname();
+        bitField0_ = (bitField0_ & ~0x00000100);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ringer_classname = 9;</code>
+       * @param value The bytes for ringerClassname to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRingerClassnameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        ringerClassname_ = value;
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1632,13 +1809,14 @@ public final class Proto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\031src/proto/towerbell.proto\022\ttowerbell\"\324" +
+      "\n\031src/proto/towerbell.proto\022\ttowerbell\"\356" +
       "\001\n\013FixedConfig\022\025\n\rdatabase_path\030\001 \001(\t\022\022\n" +
       "\ngpio_label\030\002 \001(\t\022\023\n\013server_port\030\003 \001(\005\022\026" +
       "\n\016disable_native\030\004 \001(\010\022\032\n\022template_direc" +
       "tory\030\005 \001(\t\022\035\n\025static_file_directory\030\006 \001(" +
       "\t\022\030\n\020development_mode\030\007 \001(\010\022\030\n\020gpio_logi" +
-      "cal_pin\030\010 \001(\005B\022\n\ttowerbellB\005Proto"
+      "cal_pin\030\010 \001(\005\022\030\n\020ringer_classname\030\t \001(\tB" +
+      "\022\n\ttowerbellB\005Proto"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1649,7 +1827,7 @@ public final class Proto {
     internal_static_towerbell_FixedConfig_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_towerbell_FixedConfig_descriptor,
-        new java.lang.String[] { "DatabasePath", "GpioLabel", "ServerPort", "DisableNative", "TemplateDirectory", "StaticFileDirectory", "DevelopmentMode", "GpioLogicalPin", });
+        new java.lang.String[] { "DatabasePath", "GpioLabel", "ServerPort", "DisableNative", "TemplateDirectory", "StaticFileDirectory", "DevelopmentMode", "GpioLogicalPin", "RingerClassname", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

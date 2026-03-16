@@ -30,6 +30,7 @@ import towerbell.www.WebServerThread;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.logging.Logger;
 
 public class TowerBell {
@@ -59,8 +60,7 @@ public class TowerBell {
     ConfigurationManager configurationManager = new ConfigurationManager(fixedConfig);
     ScheduleManager scheduleManager = new ScheduleManager(fixedConfig);
     SilenceManager silenceManager = new SilenceManager(fixedConfig);
-    BellRinger bellRinger =
-        new TowerBellRinger(fixedConfig, configurationManager, silenceManager);
+    BellRinger bellRinger = instantiateRingerClass(configurationManager, silenceManager);
 
     SchedulerThread schedulerThread = new SchedulerThread(scheduleManager, bellRinger);
     schedulerThread.start();
@@ -73,5 +73,21 @@ public class TowerBell {
     webServerThread.start();
 
     schedulerThread.join();  // wait forever
+  }
+
+  private BellRinger instantiateRingerClass(
+      ConfigurationManager configurationManager, SilenceManager silenceManager) throws Exception {
+    String ringerClassname = fixedConfig.getRingerClassname();
+    if (ringerClassname.isEmpty()) {
+      ringerClassname = TowerBellRinger.class.getName();
+    }
+    Class<?> clazz = Class.forName(ringerClassname);
+    Constructor<?> constructor = clazz.getConstructor(
+        Proto.FixedConfig.class,
+        ConfigurationManager.class,
+        SilenceManager.class
+    );
+    return (BellRinger) constructor.newInstance(
+        fixedConfig, configurationManager, silenceManager);
   }
 }

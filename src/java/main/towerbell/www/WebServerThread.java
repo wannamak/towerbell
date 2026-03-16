@@ -22,7 +22,7 @@ import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.UserStore;
-import org.eclipse.jetty.security.authentication.BasicAuthenticator;
+import org.eclipse.jetty.security.authentication.DigestAuthenticator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -75,7 +75,7 @@ public class WebServerThread extends Server {
     addBean(loginService);
 
     Constraint constraint = new Constraint();
-    constraint.setName(Constraint.__BASIC_AUTH);
+    constraint.setName(Constraint.__DIGEST_AUTH);
     constraint.setRoles(AUTH_ROLE);
     constraint.setAuthenticate(true);
     constraint.setDataConstraint(Constraint.DC_NONE);
@@ -85,7 +85,7 @@ public class WebServerThread extends Server {
     mapping.setPathSpec("/*");
 
     ConstraintSecurityHandler security = new ConstraintSecurityHandler();
-    security.setAuthenticator(new BasicAuthenticator());
+    security.setAuthenticator(new DigestAuthenticator());
     security.setRealmName(AUTH_REALM);
     security.addConstraintMapping(mapping);
     security.setLoginService(loginService);

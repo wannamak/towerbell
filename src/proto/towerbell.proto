@@ -42,4 +42,6 @@ message FixedConfig {
   optional bool development_mode = 7;
 
   optional int32 gpio_logical_pin = 8;
+
+  optional string ringer_classname = 9;
 }
