@@ -32,8 +32,8 @@ public class GPIORelayImpl extends GPIOController implements Relay {
 
   private boolean isClosed = false;
 
-  public GPIORelayImpl(Path devicePath, int logicalPin) {
-    super(devicePath, logicalPin, Direction.OUT);
+  public GPIORelayImpl(Path devicePath, int logicalPin, boolean isActiveLow) {
+    super(devicePath, logicalPin, Direction.OUT, isActiveLow);
   }
 
   @Override

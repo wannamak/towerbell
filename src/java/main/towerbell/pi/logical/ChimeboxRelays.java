@@ -26,12 +26,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-public class RaspberryRelays extends Relays {
-  private static final Logger logger = Logger.getLogger(RaspberryRelays.class.getName());
+public class ChimeboxRelays extends Relays {
+  private static final Logger logger = Logger.getLogger(ChimeboxRelays.class.getName());
 
   private final Path gpioDevicePath;
 
-  public RaspberryRelays(Path gpioDevicePath) {
+  public ChimeboxRelays(Path gpioDevicePath) {
     this.gpioDevicePath = gpioDevicePath;
   }
 
@@ -41,14 +41,14 @@ public class RaspberryRelays extends Relays {
     controller.initialize();
 
     relays = new Relay[] {
-        new GPIORelayImpl(gpioDevicePath, 12),  // chimes power supply
-        new GPIORelayImpl(gpioDevicePath, 16),  // low AC power to chimes
-        new GPIORelayImpl(gpioDevicePath, 20),  // high AC power to chimes
-        new GPIORelayImpl(gpioDevicePath, 21),  // note 1
-        new GPIORelayImpl(gpioDevicePath, 23),
-        new GPIORelayImpl(gpioDevicePath, 24),
-        new GPIORelayImpl(gpioDevicePath, 25),
-        new GPIORelayImpl(gpioDevicePath, 26),
+        new GPIORelayImpl(gpioDevicePath, 12, true),  // chimes power supply
+        new GPIORelayImpl(gpioDevicePath, 16, true),  // low AC power to chimes
+        new GPIORelayImpl(gpioDevicePath, 20, true),  // high AC power to chimes
+        new GPIORelayImpl(gpioDevicePath, 21, true),  // note 1
+        new GPIORelayImpl(gpioDevicePath, 23, true),
+        new GPIORelayImpl(gpioDevicePath, 24, true),
+        new GPIORelayImpl(gpioDevicePath, 25, true),
+        new GPIORelayImpl(gpioDevicePath, 26, true),
         new MCP23017RelayImpl(controller, 7),
         new MCP23017RelayImpl(controller, 6),
         new MCP23017RelayImpl(controller, 5),

@@ -40,4 +40,6 @@ message FixedConfig {
   optional string static_file_directory = 6;
 
   optional bool development_mode = 7;
+
+  optional int32 gpio_logical_pin = 8;
 }

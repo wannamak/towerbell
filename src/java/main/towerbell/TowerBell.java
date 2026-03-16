@@ -22,8 +22,7 @@ import com.google.protobuf.TextFormat;
 import towerbell.configuration.ConfigurationManager;
 import towerbell.configuration.SilenceManager;
 import towerbell.ringer.BellRinger;
-import towerbell.ringer.ChimeboxBellRinger;
-import towerbell.ringer.NoOpBellRinger;
+import towerbell.ringer.TowerBellRinger;
 import towerbell.schedule.ScheduleManager;
 import towerbell.schedule.SchedulerThread;
 import towerbell.www.WebServerThread;
@@ -60,7 +59,8 @@ public class TowerBell {
     ConfigurationManager configurationManager = new ConfigurationManager(fixedConfig);
     ScheduleManager scheduleManager = new ScheduleManager(fixedConfig);
     SilenceManager silenceManager = new SilenceManager(fixedConfig);
-    BellRinger bellRinger = new ChimeboxBellRinger(fixedConfig, configurationManager, silenceManager);
+    BellRinger bellRinger =
+        new TowerBellRinger(fixedConfig, configurationManager, silenceManager);
 
     SchedulerThread schedulerThread = new SchedulerThread(scheduleManager, bellRinger);
     schedulerThread.start();

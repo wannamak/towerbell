@@ -138,6 +138,17 @@ public final class Proto {
      * @return The developmentMode.
      */
     boolean getDevelopmentMode();
+
+    /**
+     * <code>optional int32 gpio_logical_pin = 8;</code>
+     * @return Whether the gpioLogicalPin field is set.
+     */
+    boolean hasGpioLogicalPin();
+    /**
+     * <code>optional int32 gpio_logical_pin = 8;</code>
+     * @return The gpioLogicalPin.
+     */
+    int getGpioLogicalPin();
   }
   /**
    * <pre>
@@ -461,6 +472,25 @@ public final class Proto {
       return developmentMode_;
     }
 
+    public static final int GPIO_LOGICAL_PIN_FIELD_NUMBER = 8;
+    private int gpioLogicalPin_ = 0;
+    /**
+     * <code>optional int32 gpio_logical_pin = 8;</code>
+     * @return Whether the gpioLogicalPin field is set.
+     */
+    @java.lang.Override
+    public boolean hasGpioLogicalPin() {
+      return ((bitField0_ & 0x00000080) != 0);
+    }
+    /**
+     * <code>optional int32 gpio_logical_pin = 8;</code>
+     * @return The gpioLogicalPin.
+     */
+    @java.lang.Override
+    public int getGpioLogicalPin() {
+      return gpioLogicalPin_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -496,6 +526,9 @@ public final class Proto {
       if (((bitField0_ & 0x00000040) != 0)) {
         output.writeBool(7, developmentMode_);
       }
+      if (((bitField0_ & 0x00000080) != 0)) {
+        output.writeInt32(8, gpioLogicalPin_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -528,6 +561,10 @@ public final class Proto {
       if (((bitField0_ & 0x00000040) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(7, developmentMode_);
+      }
+      if (((bitField0_ & 0x00000080) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, gpioLogicalPin_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -579,6 +616,11 @@ public final class Proto {
         if (getDevelopmentMode()
             != other.getDevelopmentMode()) return false;
       }
+      if (hasGpioLogicalPin() != other.hasGpioLogicalPin()) return false;
+      if (hasGpioLogicalPin()) {
+        if (getGpioLogicalPin()
+            != other.getGpioLogicalPin()) return false;
+      }
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -619,6 +661,10 @@ public final class Proto {
         hash = (37 * hash) + DEVELOPMENT_MODE_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
             getDevelopmentMode());
+      }
+      if (hasGpioLogicalPin()) {
+        hash = (37 * hash) + GPIO_LOGICAL_PIN_FIELD_NUMBER;
+        hash = (53 * hash) + getGpioLogicalPin();
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -760,6 +806,7 @@ public final class Proto {
         templateDirectory_ = "";
         staticFileDirectory_ = "";
         developmentMode_ = false;
+        gpioLogicalPin_ = 0;
         return this;
       }
 
@@ -821,6 +868,10 @@ public final class Proto {
         if (((from_bitField0_ & 0x00000040) != 0)) {
           result.developmentMode_ = developmentMode_;
           to_bitField0_ |= 0x00000040;
+        }
+        if (((from_bitField0_ & 0x00000080) != 0)) {
+          result.gpioLogicalPin_ = gpioLogicalPin_;
+          to_bitField0_ |= 0x00000080;
         }
         result.bitField0_ |= to_bitField0_;
       }
@@ -898,6 +949,9 @@ public final class Proto {
         if (other.hasDevelopmentMode()) {
           setDevelopmentMode(other.getDevelopmentMode());
         }
+        if (other.hasGpioLogicalPin()) {
+          setGpioLogicalPin(other.getGpioLogicalPin());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -959,6 +1013,11 @@ public final class Proto {
                 bitField0_ |= 0x00000040;
                 break;
               } // case 56
+              case 64: {
+                gpioLogicalPin_ = input.readInt32();
+                bitField0_ |= 0x00000080;
+                break;
+              } // case 64
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -1455,6 +1514,46 @@ public final class Proto {
         onChanged();
         return this;
       }
+
+      private int gpioLogicalPin_ ;
+      /**
+       * <code>optional int32 gpio_logical_pin = 8;</code>
+       * @return Whether the gpioLogicalPin field is set.
+       */
+      @java.lang.Override
+      public boolean hasGpioLogicalPin() {
+        return ((bitField0_ & 0x00000080) != 0);
+      }
+      /**
+       * <code>optional int32 gpio_logical_pin = 8;</code>
+       * @return The gpioLogicalPin.
+       */
+      @java.lang.Override
+      public int getGpioLogicalPin() {
+        return gpioLogicalPin_;
+      }
+      /**
+       * <code>optional int32 gpio_logical_pin = 8;</code>
+       * @param value The gpioLogicalPin to set.
+       * @return This builder for chaining.
+       */
+      public Builder setGpioLogicalPin(int value) {
+        
+        gpioLogicalPin_ = value;
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 gpio_logical_pin = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearGpioLogicalPin() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        gpioLogicalPin_ = 0;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1533,13 +1632,13 @@ public final class Proto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\031src/proto/towerbell.proto\022\ttowerbell\"\272" +
+      "\n\031src/proto/towerbell.proto\022\ttowerbell\"\324" +
       "\001\n\013FixedConfig\022\025\n\rdatabase_path\030\001 \001(\t\022\022\n" +
       "\ngpio_label\030\002 \001(\t\022\023\n\013server_port\030\003 \001(\005\022\026" +
       "\n\016disable_native\030\004 \001(\010\022\032\n\022template_direc" +
       "tory\030\005 \001(\t\022\035\n\025static_file_directory\030\006 \001(" +
-      "\t\022\030\n\020development_mode\030\007 \001(\010B\022\n\ttowerbell" +
-      "B\005Proto"
+      "\t\022\030\n\020development_mode\030\007 \001(\010\022\030\n\020gpio_logi" +
+      "cal_pin\030\010 \001(\005B\022\n\ttowerbellB\005Proto"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1550,7 +1649,7 @@ public final class Proto {
     internal_static_towerbell_FixedConfig_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_towerbell_FixedConfig_descriptor,
-        new java.lang.String[] { "DatabasePath", "GpioLabel", "ServerPort", "DisableNative", "TemplateDirectory", "StaticFileDirectory", "DevelopmentMode", });
+        new java.lang.String[] { "DatabasePath", "GpioLabel", "ServerPort", "DisableNative", "TemplateDirectory", "StaticFileDirectory", "DevelopmentMode", "GpioLogicalPin", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

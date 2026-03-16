@@ -42,17 +42,19 @@ public class GPIOController {
   private final Path devicePath;
   private final int logicalPin;
   private final Direction direction;
+  private final boolean isActiveLow;
   private long context;
 
-  public GPIOController(Path devicePath, int logicalPin, Direction direction) {
+  public GPIOController(Path devicePath, int logicalPin, Direction direction, boolean isActiveLow) {
     this.devicePath = devicePath;
     this.logicalPin = logicalPin;
     this.direction = direction;
+    this.isActiveLow = isActiveLow;
   }
 
   public synchronized void initialize() {
     if (direction == Direction.OUT) {
-      context = initializeOutput(devicePath.toString(), logicalPin, true);
+      context = initializeOutput(devicePath.toString(), logicalPin, isActiveLow);
     } else {
       if (direction != Direction.IN) {
         throw new IllegalStateException();
@@ -109,6 +111,7 @@ public class GPIOController {
     }
     return Objects.equals(this.logicalPin, that.logicalPin)
         && Objects.equals(this.direction, that.direction)
-        && Objects.equals(this.devicePath, that.devicePath);
+        && Objects.equals(this.devicePath, that.devicePath)
+        && Objects.equals(this.isActiveLow, that.isActiveLow);
   }
 }

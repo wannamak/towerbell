@@ -22,8 +22,10 @@ import towerbell.Proto;
 import towerbell.configuration.ConfigurationManager;
 import towerbell.configuration.SilenceManager;
 import towerbell.pi.logical.ChimeboxRelays;
+import towerbell.pi.logical.Relay;
 import towerbell.pi.logical.Relays;
 import towerbell.pi.physical.GPIOChipInfoProvider;
+import towerbell.pi.physical.GPIORelayImpl;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,56 +34,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class ChimeboxBellRinger extends BellRinger {
-  private final Logger logger = Logger.getLogger(ChimeboxBellRinger.class.getName());
+public class TowerBellRinger extends BellRinger {
+  private final Logger logger = Logger.getLogger(TowerBellRinger.class.getName());
 
-  private Relays relays;
-  private static final int POWER_RELAY_INDEX = 0;
-  private static final List<Integer> NOTES = List.of(4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-  private int currentNote = -1;
-  private final List<Integer> currentNotes = new ArrayList<>();
+  private final Relay relay;
 
-  public ChimeboxBellRinger(
+  public TowerBellRinger(
       Proto.FixedConfig fixedConfig,
       ConfigurationManager configurationManager,
       SilenceManager silenceManager) throws IOException {
     super(fixedConfig, configurationManager, silenceManager);
-    if (!fixedConfig.getDisableNative()) {
-      System.loadLibrary("towerbell");
 
-      GPIOChipInfoProvider gpioManager = new GPIOChipInfoProvider();
-      Path gpioDevicePath = gpioManager.getDevicePathForLabel(fixedConfig.getGpioLabel());
-      if (gpioDevicePath == null) {
-        throw new IOException("No device for label " + fixedConfig.getGpioLabel());
-      }
-      relays = new ChimeboxRelays(gpioDevicePath);
-      relays.initialize();
-    } else {
-      logger.info("Native library disabled");
+    System.loadLibrary("towerbell");
+
+    GPIOChipInfoProvider gpioManager = new GPIOChipInfoProvider();
+    Path gpioDevicePath = gpioManager.getDevicePathForLabel(fixedConfig.getGpioLabel());
+    if (gpioDevicePath == null) {
+      throw new IOException("No device for label " + fixedConfig.getGpioLabel());
     }
+    relay = new GPIORelayImpl(gpioDevicePath, fixedConfig.getGpioLogicalPin(), false);
+    relay.initialize();
   }
 
   @Override
   protected void beginRingSequence() {
-    relays.get(POWER_RELAY_INDEX).close();
-    if (currentNotes.isEmpty()) {
-      currentNotes.addAll(NOTES);
-    }
-    currentNote = currentNotes.remove(new SecureRandom().nextInt(currentNotes.size()));
   }
 
   @Override
   protected void beginRing() {
-    relays.get(currentNote).close();
+    relay.close();
   }
 
   @Override
   protected void endRing() {
-    relays.get(currentNote).open();
+    relay.open();
   }
 
   @Override
   protected void endRingSequence() {
-    relays.get(POWER_RELAY_INDEX).open();
   }
 }
