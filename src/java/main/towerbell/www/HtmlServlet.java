@@ -281,9 +281,11 @@ public class HtmlServlet extends HttpServlet {
     if (nextRing == null || nextRing.schedule() == null) {
       return null;
     } else if (nextRing.schedule().isHourlyRing() && nextRing.ringTime() != null) {
-      return String.format("%d rings in ", nextRing.ringTime().getHour() % 12);
+      int numRings = nextRing.ringTime().getHour() % 12;
+      return String.format("%d ring%s in ", numRings, numRings == 1 ? "" : "s");
     } else if (nextRing.schedule().getNumRings() > 0) {
-      return String.format("%d rings in ", nextRing.schedule().getNumRings());
+      int numRings = nextRing.schedule().getNumRings();
+      return String.format("%d ring%s in ", numRings, numRings == 1 ? "" : "s");
     } else {
       return null;
     }
