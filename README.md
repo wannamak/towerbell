@@ -20,8 +20,8 @@ ring a tower bell.
 dtoverlay=i2c-rtc,ds3231
 ```
 
-## GPIO
+## Origin
 
-* I unfortunately chose to upgrade the Pi to Ubuntu 24 LTS,
-which removes the simple and easy-to-use `/sys/class/gpio`
-interface in favor of the new `/dev/gpiochipN` interface.
+* The original code for driving the `/dev/gpiochipN` interface
+  came from my [chimebox](https://github.com/wannamak/chimebox/) project.
+
