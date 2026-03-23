@@ -36,6 +36,16 @@ function onAdd() {
   location.href = "/add";
 }
 
+function onEnableChanged(scheduleId, enableInput) {
+  sendRequest('POST', '/api/enable', { scheduleId: scheduleId, isEnabled: enableInput.checked }, function(err, response) {
+    if (err) {
+      console.error('Error:', err);
+    } else {
+      location.reload();
+    }
+  });
+}
+
 function onSilentChanged(silentInput) {
   sendRequest('POST', '/api/silence', { silence: silentInput.checked }, function(err, response) {
     if (err) {

@@ -36,6 +36,12 @@ public class ScheduleFormatter {
   public String format(Schedule schedule) {
     StringBuilder sb = new StringBuilder();
     sb.append("<div class=\"row\">\n");
+
+    sb.append(
+        String.format("  <div class=\"cell checkbox\">" +
+                "<input type=\"checkbox\" %s onChange=\"onEnableChanged(%d, this);\"></div>\n",
+            schedule.isEnabled() ? "checked" : "", schedule.getScheduleId()));
+
     for (DayOfWeek dayOfWeek : DAYS_OF_WEEK) {
       sb.append(
           String.format("  <div class=\"cell checkbox\">" +

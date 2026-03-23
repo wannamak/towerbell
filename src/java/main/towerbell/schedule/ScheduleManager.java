@@ -118,21 +118,39 @@ public class ScheduleManager {
         }
       }
 
-      if (!Objects.equals(oldSchedule.getPeriodMinutes(), newSchedule.getPeriodMinutes())) {
+      if (oldSchedule.getPeriodMinutes() != newSchedule.getPeriodMinutes()) {
         updater.updateColumn("PeriodMinutes", newSchedule.getPeriodMinutes());
       }
-      if (!Objects.equals(oldSchedule.getNumRings(), newSchedule.getNumRings())) {
+      if (oldSchedule.getNumRings() != newSchedule.getNumRings()) {
         updater.updateColumn("NumRings", newSchedule.getNumRings());
       }
-      if (!Objects.equals(oldSchedule.isHourlyRing(), newSchedule.isHourlyRing())) {
+      if (oldSchedule.isHourlyRing() != newSchedule.isHourlyRing()) {
         updater.updateColumn("IsHourlyRing", newSchedule.isHourlyRing());
       }
-      if (!Objects.equals(oldSchedule.getRingDurationMillis(), newSchedule.getRingDurationMillis())) {
+      if (oldSchedule.getRingDurationMillis() != newSchedule.getRingDurationMillis()) {
         updater.updateColumn("RingDurationMillis", newSchedule.getRingDurationMillis());
       }
-      if (!Objects.equals(oldSchedule.getSilenceDurationMillis(), newSchedule.getSilenceDurationMillis())) {
+      if (oldSchedule.getSilenceDurationMillis() != newSchedule.getSilenceDurationMillis()) {
         updater.updateColumn("SilenceDurationMillis", newSchedule.getSilenceDurationMillis());
       }
+      if (oldSchedule.isEnabled() != newSchedule.isEnabled()) {
+        updater.updateColumn("IsEnabled", newSchedule.isEnabled());
+      }
+      reload();
+      return true;
+    } catch (SQLException e) {
+      logger.log(Level.WARNING, e.getMessage(), e);
+      return false;
+    }
+  }
+
+  // Returns true on success.
+  public synchronized boolean updateEnabled(int scheduleId, boolean isEnabled) {
+    String url = String.format("jdbc:sqlite:%s", fixedConfig.getDatabasePath());
+    try (Connection conn = DriverManager.getConnection(url)) {
+      ColumnUpdater updater = new ColumnUpdater(
+          conn, "Schedule", "ScheduleId", scheduleId);
+      updater.updateColumn("IsEnabled", isEnabled);
       reload();
       return true;
     } catch (SQLException e) {
@@ -145,9 +163,9 @@ public class ScheduleManager {
     String url = String.format("jdbc:sqlite:%s", fixedConfig.getDatabasePath());
     String sql = "INSERT INTO Schedule (Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, " +
         "Saturday, StartTime, EndTime, PeriodMinutes, NumRings, IsHourlyRing, " +
-        "RingDurationMillis, SilenceDurationMillis) VALUES (?, ?, ?, ?, ?, ?, " +
+        "RingDurationMillis, SilenceDurationMillis, IsEnabled) VALUES (?, ?, ?, ?, ?, ?, " +
         "?, ?, ?, ?, ?, ?, " +
-        "?, ?)";
+        "?, ?, ?)";
     try (Connection conn = DriverManager.getConnection(url);
          PreparedStatement stmt = conn.prepareStatement(sql)) {
       int index = 1;
@@ -171,6 +189,7 @@ public class ScheduleManager {
       stmt.setBoolean(index++, schedule.isHourlyRing());
       stmt.setInt(index++, schedule.getRingDurationMillis());
       stmt.setInt(index++, schedule.getSilenceDurationMillis());
+      stmt.setBoolean(index++, schedule.isEnabled());
       stmt.executeUpdate();
       reload();
     } catch (SQLException e) {
@@ -202,7 +221,7 @@ public class ScheduleManager {
     Schedule computedNextRingSchedule = null;
 
     for (Schedule schedule : schedules.values()) {
-      if (schedule.getDaysOfWeek().isEmpty()) {
+      if (schedule.getDaysOfWeek().isEmpty() || !schedule.isEnabled()) {
         continue;
       }
       ZonedDateTime nextRing = computeNextRing(schedule, now);

@@ -73,20 +73,27 @@ public class ApiServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res)
       throws IOException {
-    if (req.getPathInfo().equals("/delete")) {
-      handleDelete(req, res);
-    } else if (req.getPathInfo().equals("/add")) {
-      handleAddOrUpdate(req, res, true);
-    } else if (req.getPathInfo().equals("/update")) {
-      handleAddOrUpdate(req, res, false);
-    } else if (req.getPathInfo().equals("/ring")) {
-      handleRing(req, res);
-    } else if (req.getPathInfo().equals("/config")) {
-      handleConfigUpdate(req, res);
-    } else if (req.getPathInfo().equals("/silence")) {
-      handleSilence(req, res);
-    } else {
-      logger.warning("Unhandled path: " + req.getPathInfo());
+    try {
+      if (req.getPathInfo().equals("/delete")) {
+        handleDelete(req, res);
+      } else if (req.getPathInfo().equals("/add")) {
+        handleAddOrUpdate(req, res, true);
+      } else if (req.getPathInfo().equals("/update")) {
+        handleAddOrUpdate(req, res, false);
+      } else if (req.getPathInfo().equals("/ring")) {
+        handleRing(req, res);
+      } else if (req.getPathInfo().equals("/config")) {
+        handleConfigUpdate(req, res);
+      } else if (req.getPathInfo().equals("/silence")) {
+        handleSilence(req, res);
+      } else if (req.getPathInfo().equals("/enable")) {
+        handleEnabled(req, res);
+      } else {
+        logger.warning("Unhandled path: " + req.getPathInfo());
+        sendBadRequest(res, "An unexpected error occurred.", List.of());
+      }
+    } catch (Exception e) {
+      logger.log(Level.WARNING, e.getMessage(), e);
       sendBadRequest(res, "An unexpected error occurred.", List.of());
     }
   }
@@ -173,6 +180,17 @@ public class ApiServlet extends HttpServlet {
       res.setStatus(HttpServletResponse.SC_OK);
     } catch (JSONException e) {
       logger.log(Level.WARNING, e.getMessage(), e);
+      sendBadRequest(res, "An unexpected error occurred.", List.of());
+    }
+  }
+
+  private void handleEnabled(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    JSONObject obj = new JSONObject(new JSONTokener(req.getInputStream()));
+    int scheduleId = obj.getInt("scheduleId");
+    boolean isEnabled = obj.getBoolean("isEnabled");
+    if (scheduleManager.updateEnabled(scheduleId, isEnabled)) {
+      res.setStatus(HttpServletResponse.SC_OK);
+    } else {
       sendBadRequest(res, "An unexpected error occurred.", List.of());
     }
   }
@@ -271,9 +289,12 @@ public class ApiServlet extends HttpServlet {
         scheduleId = toInt(obj.getString("scheduleid"), 0);
       }
 
+      boolean isEnabled = obj.has("isenabled") && obj.getString("isenabled").equals("1");
+
       return ValidationResult.success(scheduleFactory.createFromFields(scheduleId,
           daysOfWeek, startTimeResult.object, endTimeResult.object, periodMinutes, numRings,
-          isHourlyRing, configurationManager.getRingDurationMillis(), silenceDurationMillis));
+          isHourlyRing, configurationManager.getRingDurationMillis(), silenceDurationMillis,
+          isEnabled));
     } catch (JSONException e) {
       logger.log(Level.WARNING, e.getMessage(), e);
       return ValidationResult.failure("An unexpected error occurred.", "");

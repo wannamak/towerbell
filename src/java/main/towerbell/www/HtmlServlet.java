@@ -204,8 +204,11 @@ public class HtmlServlet extends HttpServlet {
   }
 
   private String getFinalScriptForAdd() {
-    return String.format("document.getElementById('silence').value = '%s';\n",
-        ScheduleFormatter.formatMilliseconds(configurationManager.getDefaultSilenceDurationMillis()));
+    StringBuilder result = new StringBuilder();
+    result.append(String.format("document.getElementById('silence').value = '%s';\n",
+        ScheduleFormatter.formatMilliseconds(configurationManager.getDefaultSilenceDurationMillis())));
+    result.append("document.getElementById('isenabled').value = '1';\n");
+    return result.toString();
   }
 
   private String getFinalScriptForEdit(Schedule schedule) {
@@ -244,6 +247,10 @@ public class HtmlServlet extends HttpServlet {
     result.append(
         String.format("document.getElementById('scheduleid').value = '%d';\n",
             schedule.getScheduleId()));
+
+    result.append(
+        String.format("document.getElementById('isenabled').value = '%s';\n",
+            schedule.isEnabled() ? "1" : "0"));
 
     return result.toString();
   }

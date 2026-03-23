@@ -65,8 +65,11 @@ public class ScheduleFactory {
     int ringDurationMillis = rs.getInt("RingDurationMillis");
     int silenceDurationMillis = rs.getInt("SilenceDurationMillis");
 
+    boolean isEnabled = rs.getInt("IsEnabled") > 0;
+
     return new Schedule(scheduleId, daysOfWeek, startTime, endTime,
-        periodMinutes, numRings, isHourlyRing, ringDurationMillis, silenceDurationMillis);
+        periodMinutes, numRings, isHourlyRing, ringDurationMillis, silenceDurationMillis,
+        isEnabled);
   }
 
   public Schedule createFromFields(
@@ -78,8 +81,9 @@ public class ScheduleFactory {
       int numRings,  // 0 if isHourlyRing
       boolean isHourlyRing,
       int ringDurationMillis,
-      int silenceDurationMillis) {
+      int silenceDurationMillis,
+      boolean isEnabled) {
     return new Schedule(scheduleId, daysOfWeek, startTime, endTime, periodMinutes, numRings,
-        isHourlyRing, ringDurationMillis, silenceDurationMillis);
+        isHourlyRing, ringDurationMillis, silenceDurationMillis, isEnabled);
   }
 }

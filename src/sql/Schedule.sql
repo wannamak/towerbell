@@ -32,7 +32,8 @@ CREATE TABLE Schedule
   IsHourlyRing INT NOT NULL DEFAULT 0,
   RingDurationMillis INT NOT NULL,
   SilenceDurationMillis INT NOT NULL,
-  LastModifiedTime timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
+  LastModifiedTime timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  IsEnabled INT NOT NULL DEFAULT 1
 );
 
 INSERT INTO Schedule (Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday,
@@ -45,4 +46,4 @@ VALUES (0, 1, 1, 1, 1, 1, 1, 0900, 1800, 60, 0, 1, 3000, 3000),
        (1, 0, 0, 0, 0, 0, 0, 0820,   -1,  0, 3, 0, 3000, 3000),
        (1, 0, 0, 0, 0, 0, 0, 1050,   -1,  0, 3, 0, 3000, 3000);
 
-
+-- ALTER TABLE Schedule ADD COLUMN IsEnabled INT NOT NULL DEFAULT 1;

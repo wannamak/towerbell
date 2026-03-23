@@ -33,6 +33,7 @@ public class Schedule {
   private final boolean isHourlyRing;
   private final int ringDurationMillis;
   private final int silenceDurationMillis;
+  private final boolean isEnabled;
 
   public int getScheduleId() {
     return scheduleId;
@@ -74,10 +75,14 @@ public class Schedule {
     return silenceDurationMillis;
   }
 
+  public boolean isEnabled() {
+    return isEnabled;
+  }
+
   Schedule(int scheduleId, Set<DayOfWeek> daysOfWeek, LocalTime startTime,
       LocalTime endTime, int periodMinutes,
       int numRings, boolean isHourlyRing,
-      int ringDurationMillis, int silenceDurationMillis) {
+      int ringDurationMillis, int silenceDurationMillis, boolean isEnabled) {
     this.scheduleId = scheduleId;
     this.daysOfWeek = daysOfWeek;
     this.startTime = startTime;
@@ -87,6 +92,7 @@ public class Schedule {
     this.isHourlyRing = isHourlyRing;
     this.ringDurationMillis = ringDurationMillis;
     this.silenceDurationMillis = silenceDurationMillis;
+    this.isEnabled = isEnabled;
   }
 
   @Override
@@ -101,14 +107,15 @@ public class Schedule {
         && silenceDurationMillis == schedule.silenceDurationMillis
         && Objects.equals(daysOfWeek, schedule.daysOfWeek)
         && Objects.equals(startTime, schedule.startTime)
-        && Objects.equals(endTime, schedule.endTime);
+        && Objects.equals(endTime, schedule.endTime)
+        && isEnabled == schedule.isEnabled;
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(scheduleId, daysOfWeek, startTime, endTime,
         periodMinutes, numRings, isHourlyRing, ringDurationMillis,
-        silenceDurationMillis);
+        silenceDurationMillis, isEnabled);
   }
 
   @Override
@@ -123,6 +130,7 @@ public class Schedule {
         ", isHourlyRing=" + isHourlyRing +
         ", ringDurationMillis=" + ringDurationMillis +
         ", silenceDurationMillis=" + silenceDurationMillis +
+        ", isEnabled=" + isEnabled +
         '}';
   }
 }
