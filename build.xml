@@ -4,7 +4,7 @@
   <property name="tests-destination" location="bin/test" />
   <property name="release-destination" location="bin/release" />
   <property name="test-output" location="/tmp" />
-  <property name="towerbell-version" value="1.3" />
+  <property name="towerbell-version" value="1.4" />
   <property name="release-layout" location="${release-destination}/towerbell-${towerbell-version}" />
   <property name="jars-destination" location="${release-layout}/lib" />
 
