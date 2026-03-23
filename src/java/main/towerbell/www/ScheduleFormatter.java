@@ -79,11 +79,6 @@ public class ScheduleFormatter {
     sb.append("</div>\n");
 
     sb.append("  <div class=\"cell\">");
-    sb.append(formatMilliseconds(schedule.getSilenceDurationMillis()));
-    sb.append(" seconds");
-    sb.append("</div>\n");
-
-    sb.append("  <div class=\"cell\">");
     sb.append("<a onclick=\"onUpdate(" + schedule.getScheduleId() + ");\">");
     sb.append("<img alt=\"Update\" src=\"static/update.png\">");
     sb.append("</a>");
