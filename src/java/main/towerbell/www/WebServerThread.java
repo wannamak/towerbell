@@ -24,9 +24,11 @@ import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.UserStore;
 import org.eclipse.jetty.security.authentication.DigestAuthenticator;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.SymlinkAllowedResourceAliasChecker;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
 import towerbell.Proto;
@@ -35,22 +37,28 @@ import towerbell.configuration.SilenceManager;
 import towerbell.ringer.BellRinger;
 import towerbell.schedule.ScheduleManager;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 public class WebServerThread extends Server {
   public static final String AUTH_REALM = "TowerBellRealm";
   public static final String[] AUTH_ROLE = new String[] { "user" };
 
   public WebServerThread(Proto.FixedConfig fixedConfig, ScheduleManager scheduleManager,
       ConfigurationManager configurationManager, BellRinger bellRinger,
-      SilenceManager silenceManager) {
+      SilenceManager silenceManager) throws IOException {
     super(fixedConfig.getServerPort());
+
+    Path staticFileDirectory = Path.of(fixedConfig.getStaticFileDirectory()).toRealPath();
 
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
     context.setContextPath("/");
 
     ServletHolder staticHolder = new ServletHolder("static", DefaultServlet.class);
-    staticHolder.setInitParameter("resourceBase", fixedConfig.getStaticFileDirectory());
+    staticHolder.setInitParameter("resourceBase", staticFileDirectory.toString());
     staticHolder.setInitParameter("dirAllowed", "false");
     context.addServlet(staticHolder, "/static/*");
+
     ServletHolder htmlServlet = new ServletHolder(
         new HtmlServlet(fixedConfig, scheduleManager, configurationManager, silenceManager));
     context.addServlet(htmlServlet, "/");
@@ -58,6 +66,7 @@ public class WebServerThread extends Server {
     context.addServlet(htmlServlet, "/ring");
     context.addServlet(htmlServlet, "/settings");
     context.addServlet(htmlServlet, "/update");
+
     HashLoginService loginService = new HashLoginService(AUTH_REALM);
     context.addServlet(new ServletHolder(
         new ApiServlet(scheduleManager, configurationManager, silenceManager, loginService,
