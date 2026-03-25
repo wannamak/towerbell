@@ -82,6 +82,7 @@ public class TowerBell {
       ringerClassname = TowerBellRinger.class.getName();
     }
     Class<?> clazz = Class.forName(ringerClassname);
+    logger.info("Using ringer class: " + clazz.getName());
     Constructor<?> constructor = clazz.getConstructor(
         Proto.FixedConfig.class,
         ConfigurationManager.class,

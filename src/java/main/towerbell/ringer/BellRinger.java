@@ -104,6 +104,7 @@ public abstract class BellRinger {
   }
 
   private Result ringInternal(ScheduledRing scheduledRing) {
+    logger.fine("Ring: " + scheduledRing);
     beginRingSequence();
     try {
       int numRings = scheduledRing.schedule().isHourlyRing()
@@ -114,10 +115,10 @@ public abstract class BellRinger {
           logger.fine("The bell is silenced.");
           return Result.failure("The bell is silenced.");
         }
-        logger.fine("Begin ring " + (i + 1) + " of " + numRings);
+        logger.finer("Begin ring " + (i + 1) + " of " + numRings);
         beginRing();
         threadSleep(scheduledRing.schedule().getRingDurationMillis());
-        logger.fine("End ring " + (i + 1) + " of " + numRings);
+        logger.finer("End ring " + (i + 1) + " of " + numRings);
         endRing();
         if (i < numRings - 1) {
           threadSleep(scheduledRing.schedule().getSilenceDurationMillis());
@@ -132,10 +133,10 @@ public abstract class BellRinger {
   private Result singleRingInternal() {
     beginRingSequence();
     try {
-      logger.fine("Begin single ring");
+      logger.finer("Begin single ring");
       beginRing();
       threadSleep(configurationManager.getRingDurationMillis());
-      logger.fine("End single ring");
+      logger.finer("End single ring");
       endRing();
     } finally {
       endRingSequence();
@@ -145,7 +146,7 @@ public abstract class BellRinger {
 
   private void threadSleep(int millis) {
     try {
-      logger.fine("Sleeping for " + millis + "ms");
+      logger.finest("Sleeping for " + millis + "ms");
       Thread.sleep(millis);
     } catch (InterruptedException e) {
       logger.log(Level.WARNING, "Interrupted", e);
