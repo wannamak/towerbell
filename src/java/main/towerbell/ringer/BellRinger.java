@@ -115,10 +115,10 @@ public abstract class BellRinger {
           logger.fine("The bell is silenced.");
           return Result.failure("The bell is silenced.");
         }
-        logger.finer("Begin ring " + (i + 1) + " of " + numRings);
+        logger.finest("Begin ring " + (i + 1) + " of " + numRings);
         beginRing();
         threadSleep(scheduledRing.schedule().getRingDurationMillis());
-        logger.finer("End ring " + (i + 1) + " of " + numRings);
+        logger.finest("End ring " + (i + 1) + " of " + numRings);
         endRing();
         if (i < numRings - 1) {
           threadSleep(scheduledRing.schedule().getSilenceDurationMillis());
@@ -131,6 +131,7 @@ public abstract class BellRinger {
   }
 
   private Result singleRingInternal() {
+    logger.fine("Single ring");
     beginRingSequence();
     try {
       logger.finer("Begin single ring");
