@@ -21,6 +21,7 @@ package towerbell.ringer;
 import towerbell.Proto;
 import towerbell.configuration.ConfigurationManager;
 import towerbell.configuration.SilenceManager;
+import towerbell.schedule.ScheduleManager;
 import towerbell.schedule.ScheduledRing;
 
 import java.io.IOException;
@@ -107,9 +108,7 @@ public abstract class BellRinger {
     logger.fine("Ring: " + scheduledRing);
     beginRingSequence();
     try {
-      int numRings = scheduledRing.schedule().isHourlyRing()
-          ? scheduledRing.ringTime().getHour() % 12
-          : scheduledRing.schedule().getNumRings();
+      int numRings = getNumRings(scheduledRing);
       for (int i = 0; i < numRings; i++) {
         if (silenceManager.isSilenced()) {
           logger.fine("The bell is silenced.");
@@ -128,6 +127,21 @@ public abstract class BellRinger {
       endRingSequence();
     }
     return Result.success();
+  }
+
+  private int getNumRings(ScheduledRing scheduledRing) {
+    if (scheduledRing.schedule().isHourlyRing()) {
+      int hourOfDay = scheduledRing.ringTime().getHour();
+      if (hourOfDay == 0) {
+        return 12;
+      } else if (hourOfDay > 12) {
+        return hourOfDay % 12;
+      } else {
+        return hourOfDay;
+      }
+    } else {
+      return scheduledRing.schedule().getNumRings();
+    }
   }
 
   private Result singleRingInternal() {

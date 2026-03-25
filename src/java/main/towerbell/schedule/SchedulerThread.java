@@ -91,7 +91,10 @@ public class SchedulerThread extends Thread implements DatabaseUpdateListener {
 
       logger.fine("The schedule did not change.  Ring.");
 
-      bellRinger.ring(nextRing);
+      BellRinger.Result ringResult = bellRinger.ring(nextRing);
+      if (!ringResult.success) {
+        logger.info("Ring failed: " + ringResult.errorMessage);
+      }
     }
   }
 
