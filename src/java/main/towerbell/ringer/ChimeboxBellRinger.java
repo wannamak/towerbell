@@ -72,6 +72,7 @@ public class ChimeboxBellRinger extends BellRinger {
 
   @Override
   protected void beginRing() {
+    logger.fine("Ringing note " + currentNote);
     relays.get(currentNote).close();
   }
 
