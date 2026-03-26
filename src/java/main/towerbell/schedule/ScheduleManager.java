@@ -224,15 +224,10 @@ public class ScheduleManager {
       if (schedule.getDaysOfWeek().isEmpty() || !schedule.isEnabled()) {
         continue;
       }
-      ZonedDateTime nextRing = computeNextRing(schedule, now);
+      ZonedDateTime nextRing = computeNextRingOfDay(schedule, now);
       logger.fine("nextRing = " + nextRing + " for " + schedule + " at " + now);
-      if (nextRing == null) {
-        for (int i = 1; i <= 7; i++) {
-          nextRing = computeNextRing(schedule, now.toLocalDate().plusDays(i), now.getZone());
-          if (nextRing != null) {
-            break;
-          }
-        }
+      for (int i = 1; nextRing == null && i <= 7; i++) {
+        nextRing = computeFirstRingOfDay(schedule, now.toLocalDate().plusDays(i), now.getZone());
       }
       if (nextRing != null) {
         if (computedNextRing == null) {
@@ -252,7 +247,7 @@ public class ScheduleManager {
     return new ScheduledRing(computedNextRing, computedNextRingSchedule);
   }
 
-  private ZonedDateTime computeNextRing(Schedule schedule, ZonedDateTime now) {
+  private ZonedDateTime computeNextRingOfDay(Schedule schedule, ZonedDateTime now) {
     if (!schedule.getDaysOfWeek().contains(now.getDayOfWeek())) {
       return null;
     }
@@ -272,7 +267,7 @@ public class ScheduleManager {
     return null;
   }
 
-  private ZonedDateTime computeNextRing(Schedule schedule, LocalDate today, ZoneId zoneId) {
+  private ZonedDateTime computeFirstRingOfDay(Schedule schedule, LocalDate today, ZoneId zoneId) {
     if (!schedule.getDaysOfWeek().contains(today.getDayOfWeek())) {
       return null;
     }
