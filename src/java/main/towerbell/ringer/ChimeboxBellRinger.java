@@ -37,7 +37,7 @@ public class ChimeboxBellRinger extends BellRinger {
 
   private Relays relays;
   private static final int POWER_RELAY_INDEX = 0;
-  private static final List<Integer> NOTES = List.of(4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+  private static final List<Integer> NOTES = List.of(4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15);
   private int currentNote = -1;
   private final List<Integer> currentNotes = new ArrayList<>();
 
