@@ -37,7 +37,7 @@ public class TowerBell {
   private final Logger logger = Logger.getLogger(TowerBell.class.getName());
   private final towerbell.Proto.FixedConfig fixedConfig;
 
-  public static final String VERSION = "1.4";
+  public static final String VERSION = "1.5";
 
   public static void main(String[] args) throws Exception {
     if (args.length == 0) {
