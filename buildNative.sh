@@ -5,6 +5,7 @@ CLASS_OUT_DIR=bin/main/towerbell/pi/physical
 JAVA_SRC_DIR=src/java/main/towerbell/pi/physical
 NATIVE_SRC_DIR=src/native
 JDK_INCLUDE=/usr/lib/jvm/java-21-openjdk-amd64/include
+NATIVE_OUT_DIR=build/native
 
 set -e
 
@@ -23,6 +24,8 @@ javac \
   -d $CLASS_OUT_DIR \
   $JAVA_SRC_DIR/SystemManagementBus.java
 
+mkdir -p $NATIVE_OUT_DIR
+
 aarch64-linux-gnu-gcc \
   -shared \
   -O3 \
@@ -36,4 +39,4 @@ aarch64-linux-gnu-gcc \
   $NATIVE_SRC_DIR/towerbell_pi_physical_SystemManagementBus.cpp \
   $NATIVE_SRC_DIR/towerbell_pi_physical_GPIOController.cpp \
   $NATIVE_SRC_DIR/towerbell_pi_physical_GPIOChipInfoProvider.cpp \
-  -o bin/libtowerbell.so
+  -o $NATIVE_OUT_DIR/libtowerbell.so
