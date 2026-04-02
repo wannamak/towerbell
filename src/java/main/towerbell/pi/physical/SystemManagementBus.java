@@ -31,25 +31,45 @@ public class SystemManagementBus {
     }
   }
 
-  public synchronized int readByte(int register) {
+  public synchronized int readByteData(int register) {
     if (fd < 0) {
       logger.warning("Uninitialized read of register " + register);
       return 0;
     }
-    return readByte(fd, register);
+    return readByteData(fd, register);
   }
 
-  public synchronized void writeByte(int register, int value) {
+  public synchronized void writeByteData(int register, int value) {
     if (fd < 0) {
       logger.warning("Uninitialize write of register " + register);
       return;
     }
-    if (writeByte(fd, register, value) < 0) {
+    if (writeByteData(fd, register, value) < 0) {
       logger.warning("Error writing register " + register);
     }
   }
 
-  private native int readByte(int fd, int register);
-  private native int writeByte(int fd, int register, int value);
+  public synchronized int readByte() {
+    if (fd < 0) {
+      logger.warning("Uninitialized read");
+      return 0;
+    }
+    return readByteData(fd);
+  }
+
+  public synchronized void writeByte(int value) {
+    if (fd < 0) {
+      logger.warning("Uninitialize write");
+      return;
+    }
+    if (writeByte(fd, value) < 0) {
+      logger.warning("Error writing");
+    }
+  }
+
+  private native int readByteData(int fd, int register);
+  private native int writeByteData(int fd, int register, int value);
+  private native int readByte(int fd);
+  private native int writeByte(int fd, int value);
   private native int initializeFileDescriptor(String devicePath, int deviceId);
 }

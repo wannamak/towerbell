@@ -44,4 +44,10 @@ message FixedConfig {
   optional int32 gpio_logical_pin = 8;
 
   optional string ringer_classname = 9;
+
+  optional MultiNoteConfig multi_note_config = 10;
+}
+
+message MultiNoteConfig {
+  optional int32 pcf8574_address = 1;
 }

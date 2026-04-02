@@ -9,19 +9,35 @@ extern "C" {
 #endif
 /*
  * Class:     towerbell_pi_physical_SystemManagementBus
- * Method:    readByte
+ * Method:    readByteData
  * Signature: (II)I
  */
-JNIEXPORT jint JNICALL Java_towerbell_pi_physical_SystemManagementBus_readByte
+JNIEXPORT jint JNICALL Java_towerbell_pi_physical_SystemManagementBus_readByteData
   (JNIEnv *, jobject, jint, jint);
 
 /*
  * Class:     towerbell_pi_physical_SystemManagementBus
- * Method:    writeByte
+ * Method:    writeByteData
  * Signature: (III)I
  */
-JNIEXPORT jint JNICALL Java_towerbell_pi_physical_SystemManagementBus_writeByte
+JNIEXPORT jint JNICALL Java_towerbell_pi_physical_SystemManagementBus_writeByteData
   (JNIEnv *, jobject, jint, jint, jint);
+
+/*
+ * Class:     towerbell_pi_physical_SystemManagementBus
+ * Method:    readByte
+ * Signature: (I)I
+ */
+JNIEXPORT jint JNICALL Java_towerbell_pi_physical_SystemManagementBus_readByte
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     towerbell_pi_physical_SystemManagementBus
+ * Method:    writeByte
+ * Signature: (II)I
+ */
+JNIEXPORT jint JNICALL Java_towerbell_pi_physical_SystemManagementBus_writeByte
+  (JNIEnv *, jobject, jint, jint);
 
 /*
  * Class:     towerbell_pi_physical_SystemManagementBus

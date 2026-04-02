@@ -109,31 +109,31 @@ public class MCP23017Controller {
 
   public void set(int pin, Value value) {
     Output output = OUTPUTS[pin];
-    int bitmap = bus.readByte(output.latchRegister);
+    int bitmap = bus.readByteData(output.latchRegister);
     bitmap = output.update(bitmap, value == Value.HIGH);
-    bus.writeByte(output.gpioRegister, bitmap);
+    bus.writeByteData(output.gpioRegister, bitmap);
   }
 
   public Value get(int pin) {
     Output output = OUTPUTS[pin];
-    return output.isSet(bus.readByte(output.latchRegister)) ? Value.HIGH : Value.LOW;
+    return output.isSet(bus.readByteData(output.latchRegister)) ? Value.HIGH : Value.LOW;
   }
 
   private void initializeRegisters() {
     for (int register = 0; register < 22; register++) {
       if (register == 20 || register == 21) {
-        bus.writeByte(register, 0xff);
+        bus.writeByteData(register, 0xff);
       } else {
-        bus.writeByte(register, 0);
+        bus.writeByteData(register, 0);
       }
     }
   }
 
   private void initializeDirectionRegister() {
     for (Output output : OUTPUTS) {
-      int value = bus.readByte(output.directionRegister);
+      int value = bus.readByteData(output.directionRegister);
       value = output.update(value, false /* output */);
-      bus.writeByte(output.directionRegister, value);
+      bus.writeByteData(output.directionRegister, value);
     }
   }
 }
