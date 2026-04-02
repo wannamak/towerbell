@@ -24,20 +24,6 @@ sourceSets {
     proto {
       srcDir("src/proto")
     }
-    java {
-      srcDirs("src/java/main")
-    }
-    kotlin {
-      srcDirs("src/java/main")
-    }
-  }
-  test {
-    java {
-      srcDirs("src/java/test")
-    }
-    kotlin {
-      srcDirs("src/java/test")
-    }
   }
 }
 

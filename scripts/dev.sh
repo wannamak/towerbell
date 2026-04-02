@@ -1,7 +1,7 @@
 #!/bin/sh
 
 JAR_DIR="./lib"
-CLASSPATH="bin/main"
+CLASSPATH="build/classes/java/main"
 
 for jar in "$JAR_DIR"/*.jar; do
     CLASSPATH="$CLASSPATH:$jar"
