@@ -63,7 +63,7 @@ public class SystemManagementBus {
       return;
     }
     if (writeByte(fd, value) < 0) {
-      logger.warning("Error writing");
+      logger.warning("Error writing 0x" + Integer.toHexString(value));
     }
   }
 

@@ -12,11 +12,16 @@ repositories {
   mavenCentral()
 }
 
+configurations {
+  create("releaseJars")
+}
+
 dependencies {
   implementation(fileTree("lib") { include("*.jar") })
   implementation(kotlin("stdlib"))
   testImplementation(kotlin("test"))
   testImplementation("org.junit.jupiter:junit-jupiter:6.0.3")
+  "releaseJars"(kotlin("stdlib"))
 }
 
 sourceSets {
@@ -54,6 +59,12 @@ tasks.test {
   )
 }
 
+tasks.jar {
+  manifest {
+    attributes["Main-Class"] = "towerbell.TowerBell"
+  }
+}
+
 tasks.register<Exec>("buildNative") {
   group = "build"
   description = "Compiles native files"
@@ -63,6 +74,7 @@ tasks.register<Exec>("buildNative") {
 }
 
 tasks.register<Zip>("releaseZip") {
+  val dir = "towerbell-${project.version}"
   group = "distribution"
   description = "Builds a release zip"
 
@@ -71,34 +83,29 @@ tasks.register<Zip>("releaseZip") {
   archiveFileName.set("${project.name}-${project.version}.zip")
   destinationDirectory.set(layout.buildDirectory.dir("dist"))
 
-  from(tasks.jar.get().archiveFile) {
-    into("lib")
-  }
+  into(dir) {
+    into("lib") {
+      from(configurations["releaseJars"])
+      from(tasks.jar.get().archiveFile)
+      from("lib")
+      from("libgpiod2") {
+        include("libgpiod.so.3.1.2")
+      }
+      from("build/native") {
+        include("*.so")
+      }
+    }
 
-  from(projectDir) {
-    include("LICENSE", "NOTICE")
-  }
+    from("src/www") {
+      into("www")
+    }
 
-  from("lib") {
-    into("lib")
-  }
-
-  from("src/www") {
-    into("www")
-  }
-
-  from("libgpiod2") {
-    include("libgpiod.so.3.1.2")
-    into("lib")
-  }
-
-  from("build/native") {
-    include("*.so")
-    into("lib")
-  }
-
-  from("scripts") {
-    include("towerbell.sh")
+    from(projectDir) {
+      include("LICENSE", "NOTICE")
+    }
+    from("scripts") {
+      include("towerbell.sh")
+    }
   }
 }
 
