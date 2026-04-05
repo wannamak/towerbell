@@ -201,7 +201,9 @@ public class ScheduleManager {
     String url = String.format("jdbc:sqlite:%s", fixedConfig.getDatabasePath());
     try (Connection conn = DriverManager.getConnection(url);
          Statement stmt = conn.createStatement()) {
-      try (ResultSet rs = stmt.executeQuery("SELECT * FROM Schedule")) {
+      try (ResultSet rs = stmt.executeQuery("SELECT * FROM Schedule ORDER BY "
+          + "Sunday DESC, Monday DESC, Tuesday DESC, Wednesday DESC, Thursday DESC, "
+          + "Friday DESC, Saturday DESC, StartTime")) {
         schedules.clear();
         while (rs.next()) {
           Schedule schedule = scheduleFactory.createFromResultSet(rs);
