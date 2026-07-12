@@ -45,9 +45,17 @@ message FixedConfig {
 
   optional string ringer_classname = 9;
 
-  optional MultiNoteConfig multi_note_config = 10;
+  repeated PitchConfig pitch_config = 10;
 }
 
-message MultiNoteConfig {
-  optional int32 pcf8574_address = 1;
+message Pcf8574Configuration {
+  optional int32 address = 1;
+  // 0 - 7
+  optional int32 pin = 2;
+}
+
+message PitchConfig {
+  optional string pitch_name = 1;
+  optional Pcf8574Configuration strike = 2;
+  optional Pcf8574Configuration retract = 3;
 }

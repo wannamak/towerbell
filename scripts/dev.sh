@@ -2,6 +2,7 @@
 
 JAR_DIR="./lib"
 CLASSPATH="build/classes/java/main"
+CLASSPATH=$CLASSPATH:"build/classes/kotlin/main"
 
 for jar in "$JAR_DIR"/*.jar; do
     CLASSPATH="$CLASSPATH:$jar"

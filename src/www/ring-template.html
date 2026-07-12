@@ -43,6 +43,70 @@ $HEADER
     <div class="ringbutton" onclick="onRing();">R I N G</div>
   </div>
 
+  <form id="ringForm">
+
+  <div class="table">
+    <div class="row header">
+      <div class="cell"><label for="pitchname">Pitch</label></div>
+    </div>
+
+    <div class="row">
+      <div class="cell">
+        <select
+            id="pitchname" name="pitchname" class="inputbox">
+          $PITCH_NAMES
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="table">
+    <div class="row header">
+      <div class="cell"><label for="strikedurationmillis">Strike Duration ms</label></div>
+    </div>
+
+    <div class="row">
+      <div class="cell">
+        <input id="strikedurationmillis" name="strikedurationmillis"
+               type="number" min="0" max="60000" value="3000"
+               class="inputbox" style="width: 8ch;">
+        milliseconds
+      </div>
+    </div>
+  </div>
+
+  <div class="table">
+    <div class="row header">
+      <div class="cell"><label for="pausedurationmillis">Pause Duration ms</label></div>
+    </div>
+
+    <div class="row">
+      <div class="cell">
+        <input id="pausedurationmillis" name="pausedurationmillis"
+               type="number" min="0" max="60000" value="3000"
+               class="inputbox" style="width: 8ch;">
+        milliseconds
+      </div>
+    </div>
+  </div>
+
+  <div class="table">
+    <div class="row header">
+      <div class="cell"><label for="retractdurationmillis">Retract Duration ms</label></div>
+    </div>
+
+    <div class="row">
+      <div class="cell">
+        <input id="retractdurationmillis" name="retractdurationmillis"
+               type="number" min="0" max="60000" value="3000"
+               class="inputbox" style="width: 8ch;">
+        milliseconds
+      </div>
+    </div>
+  </div>
+
+  </form>
+
   <div>
     <div class="errormessage" id="errorMessage"></div>
   </div>

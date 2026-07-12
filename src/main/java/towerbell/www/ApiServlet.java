@@ -106,7 +106,12 @@ public class ApiServlet extends HttpServlet {
   }
 
   private void handleRing(HttpServletRequest req, HttpServletResponse res) throws IOException {
-    BellRinger.Result result = bellRinger.singleRing();
+    JSONObject obj = new JSONObject(new JSONTokener(req.getInputStream()));
+    String pitchName = obj.getString("pitchName");
+    int strikeDurationMs = obj.getInt("strikeDurationMs");
+    int pauseDurationMs = obj.getInt("pauseDurationMs");
+    int retractDurationMs = obj.getInt("retractDurationMs");
+    BellRinger.Result result = bellRinger.singleRing(pitchName, strikeDurationMs, pauseDurationMs, retractDurationMs);
     if (result.success) {
       res.setStatus(HttpServletResponse.SC_OK);
     } else {

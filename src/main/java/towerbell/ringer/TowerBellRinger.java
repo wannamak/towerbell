@@ -61,13 +61,21 @@ public class TowerBellRinger extends BellRinger {
   }
 
   @Override
-  protected void beginRing() {
+  protected void beginStrike(String pitchName) {
     relay.close();
   }
 
   @Override
-  protected void endRing() {
+  protected void endStrike(String pitchName) {
     relay.open();
+  }
+
+  @Override
+  protected void beginRetract(String pitchName) {
+  }
+
+  @Override
+  protected void endRetract(String pitchName) {
   }
 
   @Override

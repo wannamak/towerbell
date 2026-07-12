@@ -41,13 +41,23 @@ public class NoOpBellRinger extends BellRinger {
   }
 
   @Override
-  protected void beginRing() {
-    logger.info("beginRing");
+  protected void beginStrike(String pitchName) {
+    logger.info("beginStrike " + pitchName);
   }
 
   @Override
-  protected void endRing() {
-    logger.info("endRing");
+  protected void endStrike(String pitchName) {
+    logger.info("endStrike " + pitchName);
+  }
+
+  @Override
+  protected void beginRetract(String pitchName) {
+    logger.info("beginRetract " + pitchName);
+  }
+
+  @Override
+  protected void endRetract(String pitchName) {
+    logger.info("endRetract " + pitchName);
   }
 
   @Override

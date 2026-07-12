@@ -37,7 +37,7 @@ public class ChimeboxBellRinger extends BellRinger {
 
   private Relays relays;
   private static final int POWER_RELAY_INDEX = 0;
-  private static final List<Integer> NOTES = List.of(4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15);
+  private static final List<Integer> NOTES = List.of(5, 6, 7, 8, 10, 11, 12, 13, 14, 15);
   private int currentNote = -1;
   private final List<Integer> currentNotes = new ArrayList<>();
 
@@ -66,19 +66,28 @@ public class ChimeboxBellRinger extends BellRinger {
     relays.get(POWER_RELAY_INDEX).close();
     if (currentNotes.isEmpty()) {
       currentNotes.addAll(NOTES);
+    } else {
+      currentNote = currentNotes.remove(new SecureRandom().nextInt(currentNotes.size()));
     }
-    currentNote = currentNotes.remove(new SecureRandom().nextInt(currentNotes.size()));
   }
 
   @Override
-  protected void beginRing() {
+  protected void beginStrike(String pitchName) {
     logger.fine("Ringing note " + currentNote);
     relays.get(currentNote).close();
   }
 
   @Override
-  protected void endRing() {
+  protected void endStrike(String pitchName) {
     relays.get(currentNote).open();
+  }
+
+  @Override
+  protected void beginRetract(String pitchName) {
+  }
+
+  @Override
+  protected void endRetract(String pitchName) {
   }
 
   @Override

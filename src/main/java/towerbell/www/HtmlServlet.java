@@ -40,6 +40,7 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class HtmlServlet extends HttpServlet {
@@ -54,17 +55,19 @@ public class HtmlServlet extends HttpServlet {
   private final ScheduleManager scheduleManager;
   private final ConfigurationManager configurationManager;
   private final SilenceManager silenceManager;
+  private final List<Proto.PitchConfig> pitchConfigs;
   private final ScheduleFormatter scheduleFormatter = new ScheduleFormatter();
   private final TimeFormatter timeFormatter = new TimeFormatter();
   private final PathUtil pathUtil = new PathUtil();
 
   public HtmlServlet(Proto.FixedConfig fixedConfig, ScheduleManager scheduleManager,
       ConfigurationManager configurationManager, SilenceManager silenceManager) {
-    templateDirectory = fixedConfig.getTemplateDirectory();
-    developmentMode = fixedConfig.getDevelopmentMode();
+    this.templateDirectory = fixedConfig.getTemplateDirectory();
+    this.developmentMode = fixedConfig.getDevelopmentMode();
     this.scheduleManager = scheduleManager;
     this.configurationManager = configurationManager;
     this.silenceManager = silenceManager;
+    this.pitchConfigs = fixedConfig.getPitchConfigList();
   }
 
   @Override
@@ -142,7 +145,8 @@ public class HtmlServlet extends HttpServlet {
 
   private String expandRingTemplate() {
     return expandInfoBox(ringTemplate)
-        .replace("$HEADER", headerInclude);
+        .replace("$HEADER", headerInclude)
+        .replace("$PITCH_NAMES", getPitchNamesString());
   }
 
   private String expandMainTemplate() {
@@ -296,5 +300,14 @@ public class HtmlServlet extends HttpServlet {
     } else {
       return null;
     }
+  }
+
+  private String getPitchNamesString() {
+    StringBuilder sb = new StringBuilder();
+    for (Proto.PitchConfig pitchConfig : pitchConfigs) {
+      String pitchName = pitchConfig.getPitchName();
+      sb.append(String.format("<option value=\"%s\">%s</option>\n", pitchName, pitchName));
+    }
+    return sb.toString();
   }
 }

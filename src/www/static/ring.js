@@ -17,8 +17,15 @@
  *  under the License.
  */
  function onRing(url) {
+  form = document.getElementById("ringForm");
+  pitchName = form.elements["pitchname"].value;
+  strikeDurationMs = form.elements["strikedurationmillis"].value;
+  pauseDurationMs = form.elements["pausedurationmillis"].value;
+  retractDurationMs = form.elements["retractdurationmillis"].value;
   document.getElementById("errorMessage").innerText = "";
-  sendRequest('POST', '/api/ring', null, function(err, response) {
+  sendRequest('POST', '/api/ring',
+   { pitchName: pitchName, strikeDurationMs: strikeDurationMs, pauseDurationMs: pauseDurationMs, retractDurationMs: retractDurationMs },
+   function(err, response) {
     if (err && err.errorMessage) {
       document.getElementById("errorMessage").innerText = err.errorMessage;
     }
