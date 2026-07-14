@@ -21,6 +21,7 @@ package towerbell.ringer;
 import towerbell.Proto;
 import towerbell.configuration.ConfigurationManager;
 import towerbell.configuration.SilenceManager;
+import towerbell.music.Pitch;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -41,23 +42,23 @@ public class NoOpBellRinger extends BellRinger {
   }
 
   @Override
-  protected void beginStrike(String pitchName) {
-    logger.info("beginStrike " + pitchName);
+  protected void beginStrike(Pitch pitch) {
+    logger.info("beginStrike " + pitch);
   }
 
   @Override
-  protected void endStrike(String pitchName) {
-    logger.info("endStrike " + pitchName);
+  protected void endStrike(Pitch pitch) {
+    logger.info("endStrike " + pitch);
   }
 
   @Override
-  protected void beginRetract(String pitchName) {
-    logger.info("beginRetract " + pitchName);
+  protected void beginRetract(Pitch pitch) {
+    logger.info("beginRetract " + pitch);
   }
 
   @Override
-  protected void endRetract(String pitchName) {
-    logger.info("endRetract " + pitchName);
+  protected void endRetract(Pitch pitch) {
+    logger.info("endRetract " + pitch);
   }
 
   @Override

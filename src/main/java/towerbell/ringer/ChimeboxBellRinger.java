@@ -21,6 +21,7 @@ package towerbell.ringer;
 import towerbell.Proto;
 import towerbell.configuration.ConfigurationManager;
 import towerbell.configuration.SilenceManager;
+import towerbell.music.Pitch;
 import towerbell.pi.logical.ChimeboxRelays;
 import towerbell.pi.logical.Relays;
 import towerbell.pi.physical.GPIOChipInfoProvider;
@@ -72,22 +73,22 @@ public class ChimeboxBellRinger extends BellRinger {
   }
 
   @Override
-  protected void beginStrike(String pitchName) {
+  protected void beginStrike(Pitch pitch) {
     logger.fine("Ringing note " + currentNote);
     relays.get(currentNote).close();
   }
 
   @Override
-  protected void endStrike(String pitchName) {
+  protected void endStrike(Pitch pitch) {
     relays.get(currentNote).open();
   }
 
   @Override
-  protected void beginRetract(String pitchName) {
+  protected void beginRetract(Pitch pitch) {
   }
 
   @Override
-  protected void endRetract(String pitchName) {
+  protected void endRetract(Pitch pitch) {
   }
 
   @Override

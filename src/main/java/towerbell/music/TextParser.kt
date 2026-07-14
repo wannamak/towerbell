@@ -29,14 +29,14 @@ object TextParser {
     PitchLetter.G, PitchLetter.A, PitchLetter.B
   )
 
-  fun parse(source: String, title: String = "Untitled", defaultTempoBpm: Int = 120): Song {
+  fun parse(source: String, title: String = "Untitled", defaultTempoBpm: Int = 120): Composition {
     var text = stripComments(source)
     val tempo = tempoRegex.find(text)?.groupValues?.get(1)?.toIntOrNull() ?: defaultTempoBpm
     text = text.replace(tempoRegex, " ")
 
     val tokens = tokenize(text)
     val voices = TokenParser(tokens).parse()
-    return Song(title, tempo, voices)
+    return Composition(title, tempo, voices)
   }
 
   private fun stripComments(source: String): String =

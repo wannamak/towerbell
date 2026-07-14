@@ -6,6 +6,7 @@ plugins {
 }
 
 group = "towerbell"
+// Also, TowerBell.VERSION
 version = "2.0"
 
 repositories {

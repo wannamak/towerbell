@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import towerbell.configuration.ConfigurationManager;
 import towerbell.configuration.SilenceManager;
+import towerbell.music.Pitch;
 import towerbell.ringer.BellRinger;
 import towerbell.schedule.Schedule;
 import towerbell.schedule.ScheduleFactory;
@@ -111,7 +112,8 @@ public class ApiServlet extends HttpServlet {
     int strikeDurationMs = obj.getInt("strikeDurationMs");
     int pauseDurationMs = obj.getInt("pauseDurationMs");
     int retractDurationMs = obj.getInt("retractDurationMs");
-    BellRinger.Result result = bellRinger.singleRing(pitchName, strikeDurationMs, pauseDurationMs, retractDurationMs);
+    BellRinger.Result result = bellRinger.singleRing(
+        Pitch.fromString(pitchName), strikeDurationMs, pauseDurationMs, retractDurationMs);
     if (result.success) {
       res.setStatus(HttpServletResponse.SC_OK);
     } else {

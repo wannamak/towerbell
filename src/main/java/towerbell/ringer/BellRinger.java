@@ -21,6 +21,7 @@ package towerbell.ringer;
 import towerbell.Proto;
 import towerbell.configuration.ConfigurationManager;
 import towerbell.configuration.SilenceManager;
+import towerbell.music.Pitch;
 import towerbell.schedule.ScheduleManager;
 import towerbell.schedule.ScheduledRing;
 
@@ -38,10 +39,10 @@ public abstract class BellRinger {
   private final ReentrantLock lock = new ReentrantLock();
 
   protected abstract void beginRingSequence();
-  protected abstract void beginStrike(String pitchName);
-  protected abstract void endStrike(String pitchName);
-  protected abstract void beginRetract(String pitchName);
-  protected abstract void endRetract(String pitchName);
+  protected abstract void beginStrike(Pitch pitch);
+  protected abstract void endStrike(Pitch pitch);
+  protected abstract void beginRetract(Pitch pitch);
+  protected abstract void endRetract(Pitch pitch);
   protected abstract void endRingSequence();
 
   public static class Result {
@@ -74,10 +75,10 @@ public abstract class BellRinger {
 
   public Result ring(ScheduledRing scheduledRing) {
     if (silenceManager.isSilenced()) {
-      return Result.failure("The bell is silenced.");
+      return Result.failure("The chimes are silenced.");
     }
     if (!lock.tryLock()) {
-      return Result.failure("The bell is already ringing.");
+      return Result.failure("The chimes are already ringing.");
     }
     try {
       return ringInternal(scheduledRing);
@@ -89,15 +90,15 @@ public abstract class BellRinger {
     }
   }
 
-  public Result singleRing(String pitchName, int strikeDurationMs, int pauseDurationMs, int retractDurationMs) {
+  public Result singleRing(Pitch pitch, int strikeDurationMs, int pauseDurationMs, int retractDurationMs) {
     if (silenceManager.isSilenced()) {
-      return Result.failure("The bell is silenced.");
+      return Result.failure("The chimes are silenced.");
     }
     if (!lock.tryLock()) {
-      return Result.failure("The bell is already ringing.");
+      return Result.failure("The chimes are already ringing.");
     }
     try {
-      return singleRingInternal(pitchName, strikeDurationMs, pauseDurationMs, retractDurationMs);
+      return singleRingInternal(pitch, strikeDurationMs, pauseDurationMs, retractDurationMs);
     } catch (Exception e) {
       logger.log(Level.WARNING, e.getMessage(), e);
       return Result.failure("An unexpected error occurred.");
@@ -106,6 +107,8 @@ public abstract class BellRinger {
     }
   }
 
+  private static final Pitch SINGLE_BELL_ARBITRARY_PITCH = Pitch.fromString("C1");
+
   private Result ringInternal(ScheduledRing scheduledRing) {
     logger.fine("Ring: " + scheduledRing);
     beginRingSequence();
@@ -113,14 +116,14 @@ public abstract class BellRinger {
       int numRings = getNumRings(scheduledRing);
       for (int i = 0; i < numRings; i++) {
         if (silenceManager.isSilenced()) {
-          logger.fine("The bell is silenced.");
-          return Result.failure("The bell is silenced.");
+          logger.fine("The chimes are silenced.");
+          return Result.failure("The chimes are silenced.");
         }
         logger.finest("Begin ring " + (i + 1) + " of " + numRings);
-        beginStrike("");
+        beginStrike(SINGLE_BELL_ARBITRARY_PITCH);
         threadSleep(scheduledRing.schedule().getRingDurationMillis());
         logger.finest("End ring " + (i + 1) + " of " + numRings);
-        endStrike("");
+        endStrike(SINGLE_BELL_ARBITRARY_PITCH);
         if (i < numRings - 1) {
           threadSleep(scheduledRing.schedule().getSilenceDurationMillis());
         }
@@ -146,25 +149,27 @@ public abstract class BellRinger {
     }
   }
 
-  private Result singleRingInternal(String pitchName, int strikeDurationMs, int pauseDurationMs, int retractDurationMs) {
+  private Result singleRingInternal(Pitch pitch, int strikeDurationMs, int pauseDurationMs, int retractDurationMs) {
     logger.fine("Single ring");
     beginRingSequence();
     try {
-      logger.finer("Begin single strike " + pitchName);
-      beginStrike(pitchName);
+      logger.finer("Begin single strike " + pitch);
+      beginStrike(pitch);
       threadSleep(strikeDurationMs);
 
-      logger.finer("End single strike " + pitchName);
-      endStrike(pitchName);
+      logger.finer("End single strike " + pitch);
+      endStrike(pitch);
 
-      threadSleep(pauseDurationMs);
+      if (retractDurationMs > 0) {
+        threadSleep(pauseDurationMs);
 
-      logger.finer("Begin single retract " + pitchName);
-      beginRetract(pitchName);
-      threadSleep(retractDurationMs);
+        logger.finer("Begin single retract " + pitch);
+        beginRetract(pitch);
+        threadSleep(retractDurationMs);
 
-      logger.finer("End single retract " + pitchName);
-      endRetract(pitchName);
+        logger.finer("End single retract " + pitch);
+        endRetract(pitch);
+      }
     } finally {
       endRingSequence();
     }

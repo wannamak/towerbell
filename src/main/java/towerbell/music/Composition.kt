@@ -34,6 +34,21 @@ data class Pitch(
   val octave: Int = 4
 ) {
   override fun toString() = "$letter${accidental.symbol}$octave"
+
+  companion object {
+    private val PITCH_REGEX = Regex("""([A-G])([#b♯♭]*)(-?\d+)""")
+
+    @JvmStatic
+    fun fromString(pitchString: String): Pitch {
+      val (letter, symbol, octave) = PITCH_REGEX.matchEntire(pitchString)?.destructured
+        ?: throw IllegalArgumentException("Invalid pitch string: $pitchString")
+
+      val accidental = Accidental.entries.firstOrNull { it.symbol == symbol }
+        ?: Accidental.NATURAL
+
+      return Pitch(PitchLetter.valueOf(letter), accidental, octave.toInt())
+    }
+  }
 }
 
 data class Duration(val beats: Double, val dotted: Boolean = false) {
@@ -80,7 +95,7 @@ data class Voice(
     get() = elements.sumOf { it.duration.totalBeats }
 }
 
-data class Song(
+data class Composition(
   val title: String,
   val tempoBpm: Int,
   val voices: List<Voice>

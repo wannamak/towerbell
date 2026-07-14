@@ -3,6 +3,7 @@ package towerbell.ringer
 import towerbell.Proto
 import towerbell.configuration.ConfigurationManager
 import towerbell.configuration.SilenceManager
+import towerbell.music.Pitch
 import towerbell.pi.physical.PCF8574Relays
 import java.util.logging.Logger
 
@@ -13,8 +14,8 @@ class MultiNoteBellRinger(fixedConfig: Proto.FixedConfig,
                           silenceManager: SilenceManager
 ) : BellRinger(fixedConfig, configurationManager, silenceManager) {
   val relays = mutableMapOf<Int, PCF8574Relays>()
-  val pitchNamesToStrike = mutableMapOf<String, RelayAddress>()
-  val pitchNamesToRetract = mutableMapOf<String, RelayAddress>()
+  val pitchToStrikeRelay = mutableMapOf<Pitch, RelayAddress>()
+  val pitchToRetractRelay = mutableMapOf<Pitch, RelayAddress>()
   private val logger: Logger = Logger.getLogger(TowerBellRinger::class.java.name)
 
   init {
@@ -24,9 +25,10 @@ class MultiNoteBellRinger(fixedConfig: Proto.FixedConfig,
       relays.getOrPut(address) { PCF8574Relays(address) }
 
     for (pitchConfig in fixedConfig.pitchConfigList) {
-      pitchNamesToStrike[pitchConfig.pitchName] =
+      val pitch = Pitch.fromString(pitchConfig.pitchName)
+      pitchToStrikeRelay[pitch] =
           RelayAddress(relayFor(pitchConfig.strike.address), pitchConfig.strike.pin)
-      pitchNamesToRetract[pitchConfig.pitchName] =
+      pitchToRetractRelay[pitch] =
           RelayAddress(relayFor(pitchConfig.retract.address), pitchConfig.retract.pin)
     }
   }
@@ -34,33 +36,33 @@ class MultiNoteBellRinger(fixedConfig: Proto.FixedConfig,
   override fun beginRingSequence() {
   }
 
-  override fun beginStrike(pitchName: String) {
-    val relayAddress = pitchNamesToStrike[pitchName] ?: run {
-      logger.info("No relay for pitch $pitchName strike")
+  override fun beginStrike(pitch: Pitch) {
+    val relayAddress = pitchToStrikeRelay[pitch] ?: run {
+      logger.info("No relay for pitch $pitch strike")
       return
     }
     relayAddress.relay.set(relayAddress.pin, PCF8574Relays.Value.HIGH)
   }
 
-  override fun endStrike(pitchName: String) {
-    val relayAddress = pitchNamesToStrike[pitchName] ?: run {
-      logger.info("No relay for pitch $pitchName strike")
+  override fun endStrike(pitch: Pitch) {
+    val relayAddress = pitchToStrikeRelay[pitch] ?: run {
+      logger.info("No relay for pitch $pitch strike")
       return
     }
     relayAddress.relay.set(relayAddress.pin, PCF8574Relays.Value.LOW)
   }
 
-  override fun beginRetract(pitchName: String) {
-    val relayAddress = pitchNamesToRetract[pitchName] ?: run {
-      logger.info("No relay for pitch $pitchName retract")
+  override fun beginRetract(pitch: Pitch) {
+    val relayAddress = pitchToRetractRelay[pitch] ?: run {
+      logger.info("No relay for pitch $pitch retract")
       return
     }
     relayAddress.relay.set(relayAddress.pin, PCF8574Relays.Value.HIGH)
   }
 
-  override fun endRetract(pitchName: String) {
-    val relayAddress = pitchNamesToRetract[pitchName] ?: run {
-      logger.info("No relay for pitch $pitchName retract")
+  override fun endRetract(pitch: Pitch) {
+    val relayAddress = pitchToRetractRelay[pitch] ?: run {
+      logger.info("No relay for pitch $pitch retract")
       return
     }
     relayAddress.relay.set(relayAddress.pin, PCF8574Relays.Value.LOW)
