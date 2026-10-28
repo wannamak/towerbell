@@ -14,4 +14,4 @@ java \
   -Djava.util.logging.config.file=logging.properties \
   -Djava.library.path=$(pwd)/lib \
   -cp $CLASSPATH \
-  towerbell.TowerBell config.txt
+  towerbell.TowerBell chimebox-config.txt
