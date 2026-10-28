@@ -48,6 +48,10 @@ message FixedConfig {
   repeated PitchConfiguration pitch_config = 10;
 
   optional OutputConfiguration power_config = 11;
+
+  optional string header_title = 12;
+
+  optional string header_image_url = 13;
 }
 
 message OutputConfiguration {

@@ -12,7 +12,7 @@ import kotlin.collections.plus
 import kotlin.text.orEmpty
 
 class TemplateEngine(
-  fixedConfig: Proto.FixedConfig,
+  private val fixedConfig: Proto.FixedConfig,
   scheduleManager: ScheduleManager,
   silenceManager: SilenceManager,
   configurationManager: ConfigurationManager) {
@@ -53,7 +53,10 @@ class TemplateEngine(
     configTemplate = readFile("config-template.html")
     homeTemplate = readFile("home-template.html")
     scheduleTemplate = readFile("schedule-template.html")
-    commonReplacements = mapOf("\$HEADER" to readFile("header.inc"))
+    commonReplacements = mapOf("\$HEADER" to expand(readFile("header.inc"),
+      mapOf("" +
+          "\$HEADER_TITLE" to fixedConfig.headerTitle,
+          "\$HEADER_IMAGE_URL" to fixedConfig.headerImageUrl)))
   }
 
   private fun expand(template: String, replacements: Map<String, String>): String {
