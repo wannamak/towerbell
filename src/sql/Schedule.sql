@@ -33,17 +33,18 @@ CREATE TABLE Schedule
   RingDurationMillis INT NOT NULL,
   SilenceDurationMillis INT NOT NULL,
   LastModifiedTime timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  IsEnabled INT NOT NULL DEFAULT 1
+  IsEnabled INT NOT NULL DEFAULT 1,
+  TuneSelectorId INT
 );
 
 INSERT INTO Schedule (Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday,
  StartTime, EndTime, PeriodMinutes, NumRings, IsHourlyRing,
- RingDurationMillis, SilenceDurationMillis)
-VALUES (0, 1, 1, 1, 1, 1, 1, 0900, 1800, 60, 0, 1, 3000, 3000),
-       (0, 1, 1, 1, 1, 1, 1, 0930, 1730, 60, 1, 0, 3000, 3000),
-       (1, 0, 0, 0, 0, 0, 0, 1300, 1800, 60, 0, 1, 3000, 3000),
-       (1, 0, 0, 0, 0, 0, 0, 1330, 1730, 60, 1, 0, 3000, 3000),
-       (1, 0, 0, 0, 0, 0, 0, 0820,   -1,  0, 3, 0, 3000, 3000),
-       (1, 0, 0, 0, 0, 0, 0, 1050,   -1,  0, 3, 0, 3000, 3000);
+ RingDurationMillis, SilenceDurationMillis, TuneSelectorId)
+VALUES (0, 1, 1, 1, 1, 1, 1, 0900, 1800, 60, 0, 1, 3000, 3000, NULL),
+       (0, 1, 1, 1, 1, 1, 1, 0930, 1730, 60, 1, 0, 3000, 3000, NULL),
+       (1, 0, 0, 0, 0, 0, 0, 1300, 1800, 60, 0, 1, 3000, 3000, NULL),
+       (1, 0, 0, 0, 0, 0, 0, 1330, 1730, 60, 1, 0, 3000, 3000, NULL),
+       (1, 0, 0, 0, 0, 0, 0, 0820,   -1,  0, 3, 0, 3000, 3000, NULL),
+       (1, 0, 0, 0, 0, 0, 0, 1050,   -1,  0, 3, 0, 3000, 3000, NULL);
 
 -- ALTER TABLE Schedule ADD COLUMN IsEnabled INT NOT NULL DEFAULT 1;

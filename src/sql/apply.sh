@@ -25,7 +25,10 @@ for SQL in \
  drop \
  Schedule \
  Configuration \
- Silence
+ Silence \
+ Tune \
+ TuneSelector \
+ TuneSelectorTune
  do
   echo ----- Applying $SQL.sql -----
   sqlite3 $LOCAL_DB_FILE < $SQL.sql
