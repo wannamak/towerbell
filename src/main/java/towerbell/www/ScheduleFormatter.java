@@ -114,7 +114,7 @@ public class ScheduleFormatter {
     }
   }
 
-  protected static String formatMilliseconds(int millis) {
+  public static String formatMilliseconds(int millis) {
     String raw = String.format("%f", millis / 1000.0);
     return raw.replaceAll("0*$", "").replaceAll("\\.$", "");
   }

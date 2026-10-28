@@ -32,7 +32,7 @@ $HEADER
 
 <form>
   <div style="display: flex; flex-direction: column; width: fit-content; padding-left: 3em;">
-    <h2>$1_ADD_OR_EDIT Schedule</h2>
+    <h2>$ADD_OR_EDIT Schedule</h2>
 
     <div class="table" style="margin-top: 1em; margin-bottom: 2em;">
       <div class="row header">
@@ -142,7 +142,7 @@ $HEADER
       </div>
       <div class="row footer">
         <div class="cell">
-          <input type="button" value="$2_ADD_OR_UPDATE" class="button" onclick="$3_ADD_OR_UPDATE_FUNCTION_NAME();">
+          <input type="button" value="$ADD_OR_UPDATE" class="button" onclick="$ADD_OR_UPDATE_FUNCTION_NAME();">
           <span style="padding-left: 3em;">&nbsp;</span>
           <input type="button" value="Cancel" class="button" onclick="onCancel();">
         </div>
@@ -154,7 +154,7 @@ $HEADER
 </form>
 
 <script lang="javascript">
-$4_FINAL_SCRIPT
+$FINAL_SCRIPT
 const numRingsElement = document.getElementById("numrings");
 savedNumRings = numRingsElement.value;
 </script>
