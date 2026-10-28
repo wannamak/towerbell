@@ -1,6 +1,8 @@
 bin
 .idea/
 towerbell.jar
+deagan-config.txt
+chimebox-config.txt
 config.txt
 towerbell-*.zip
 deploy.sh
