@@ -9,5 +9,7 @@ class AddTuneReplacements {
       "\$FINAL_SCRIPT" to getFinalScriptForAdd())
 
   private fun getFinalScriptForAdd(): String = buildString {
+    appendLine("document.getElementById('temponotevalue').value = 4;")
+    appendLine("document.getElementById('beatsperminute').value = 80;")
   }
 }

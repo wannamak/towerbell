@@ -25,6 +25,7 @@ import towerbell.ringer.BellRinger;
 import towerbell.ringer.TowerBellRinger;
 import towerbell.schedule.ScheduleManager;
 import towerbell.schedule.SchedulerThread;
+import towerbell.tune.TuneManager;
 import towerbell.www.WebServerThread;
 
 import java.io.BufferedReader;
@@ -60,6 +61,7 @@ public class TowerBell {
   public void run() throws Exception {
     ConfigurationManager configurationManager = new ConfigurationManager(fixedConfig);
     ScheduleManager scheduleManager = new ScheduleManager(fixedConfig);
+    TuneManager tuneManager = new TuneManager(fixedConfig);
     SilenceManager silenceManager = new SilenceManager(fixedConfig);
     BellRinger bellRinger = instantiateRingerClass(configurationManager, silenceManager);
 
@@ -70,7 +72,7 @@ public class TowerBell {
     scheduleManager.setDatabaseUpdateListener(schedulerThread);
 
     WebServerThread webServerThread = new WebServerThread(fixedConfig, scheduleManager,
-        configurationManager, bellRinger, silenceManager);
+        tuneManager, configurationManager, bellRinger, silenceManager);
     webServerThread.start();
 
     schedulerThread.join();  // wait forever

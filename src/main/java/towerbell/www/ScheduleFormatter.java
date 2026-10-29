@@ -80,10 +80,10 @@ public class ScheduleFormatter {
 
     sb.append("  <div class=\"cell\">");
     sb.append("<a onclick=\"onUpdate(" + schedule.getScheduleId() + ");\">");
-    sb.append("<img alt=\"Update\" src=\"static/update.png\">");
+    sb.append("<img alt=\"Update\" src=\"/static/update.png\">");
     sb.append("</a>");
     sb.append("<a onclick=\"onDelete(" + schedule.getScheduleId() + ");\">");
-    sb.append("<img alt=\"Delete\" src=\"static/delete.png\">");
+    sb.append("<img alt=\"Delete\" src=\"/static/delete.png\">");
     sb.append("</a>");
     sb.append("</div>\n");
 

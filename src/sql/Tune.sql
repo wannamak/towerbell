@@ -30,4 +30,4 @@ CREATE TABLE Tune
 
 INSERT INTO Tune (TuneId, TuneName, TempoNoteValue, BeatsPerMinute, KeySignatureNote,
                   KeySignatureAccidental, KeySignatureMode, LilyPondRelativeNote, TuneNotes)
-  VALUES (0, "Westminster First Quarter", 4, 60, "E", "", ""major", "g'", "gs4 fs4 e4 b2.");
+  VALUES (0, "Westminster First Quarter", 4, 60, "E", "", "major", "g'", "gs4 fs4 e4 b2.");

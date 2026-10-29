@@ -5,6 +5,7 @@ import towerbell.configuration.ConfigurationManager
 import towerbell.configuration.SilenceManager
 import towerbell.schedule.Schedule
 import towerbell.schedule.ScheduleManager
+import towerbell.tune.Tune
 import towerbell.www.TimeFormatter
 import java.io.File
 import java.util.logging.Logger
@@ -37,6 +38,7 @@ class TemplateEngine(
 
   private var tuneTemplate = ""
   private val addTuneReplacements = AddTuneReplacements()
+  private val editTuneReplacements = EditTuneReplacements()
 
   private var commonReplacements = mapOf<String, String>()
 
@@ -51,6 +53,8 @@ class TemplateEngine(
   fun getEditScheduleHtml(schedule: Schedule) = expand(scheduleTemplate,
     editScheduleReplacements.getReplacements(schedule) + commonReplacements)
   fun getAddTuneHtml() = expand(tuneTemplate, addTuneReplacements.replacements + commonReplacements)
+  fun getEditTuneHtml(tune: Tune) = expand(tuneTemplate,
+    editTuneReplacements.getReplacements(tune) + commonReplacements)
 
   public fun readTemplates() {
     ringTemplate = readFile("ring-template.html")
@@ -67,7 +71,12 @@ class TemplateEngine(
   }
 
   private fun expand(template: String, replacements: Map<String, String>): String {
-    return template.replace(placeholderRegex) { replacements[it.value].orEmpty();  }
+    return template.replace(placeholderRegex) { match ->
+      replacements[match.value] ?: run {
+        logger.warning("No replacement for placeholder ${match.value}")
+        ""
+      }
+    }
   }
 
   private fun readFile(fileName: String): String {

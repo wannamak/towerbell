@@ -37,14 +37,10 @@ $HEADER
         <div class="cell"><label for="tunename">Tune Name</label></div>
       </div>
       <div class="cell">
-        <input id="tunename" name="tunename" type="text" min="0" max="12" class="inputbox"
-               style="width: 20ch;">
+        <input id="tunename" name="tunename" type="text" min="0" max="30" class="inputbox"
+               style="width: 30ch;">
       </div>
     </div>
-
-    <span style="display: flex; justify-content: center; margin-bottom: 5px;">
-      Tempo
-    </span>
 
     <div class="table" style="margin-bottom: 2em;">
       <div class="row header">
@@ -66,7 +62,7 @@ $HEADER
 
         <div class="cell">
           <input id="beatsperminute" name="beatsperminute" type="number" min="0" max="999" class="inputbox"
-                 style="width: 5ch;">
+                 style="width: 7ch;">
         </div>
       </div>
     </div>
@@ -119,8 +115,15 @@ $HEADER
       <div class="row header">
         <div class="cell"><label for="tunenotes">Tune Notes</label></div>
       </div>
-      <div class="cell">
-        <textarea id="tunenotes" name="tunenotes" rows="5"></textarea>
+      <div class="row footer">
+        <div class="cell">
+          <textarea id="tunenotes" name="tunenotes" rows="5" style="width: 100%;"></textarea>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="cell center">
+          <input type="button" value="Generate Score" class="button" onclick="generateScore();">
+        </div>
       </div>
     </div>
 
@@ -130,8 +133,6 @@ $HEADER
       </div>
       <div class="row footer">
         <div class="cell">
-          <input type="button" value="Generate Score" class="button" onclick="generateScore();">
-          <span style="padding-left: 3em;">&nbsp;</span>
           <input type="button" value="$ADD_OR_UPDATE" class="button" onclick="$ADD_OR_UPDATE_FUNCTION_NAME();">
           <span style="padding-left: 3em;">&nbsp;</span>
           <input type="button" value="Cancel" class="button" onclick="onCancel();">

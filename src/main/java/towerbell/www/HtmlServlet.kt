@@ -26,12 +26,15 @@ import towerbell.configuration.ConfigurationManager
 import towerbell.configuration.SilenceManager
 import towerbell.schedule.Schedule
 import towerbell.schedule.ScheduleManager
+import towerbell.tune.Tune
+import towerbell.tune.TuneManager
 import towerbell.www.template.TemplateEngine
 import java.util.logging.Logger
 
 class HtmlServlet(
   fixedConfig: FixedConfig,
   private val scheduleManager: ScheduleManager,
+  private val tuneManager: TuneManager,
   configurationManager: ConfigurationManager,
   silenceManager: SilenceManager
 ) : HttpServlet() {
@@ -61,6 +64,15 @@ class HtmlServlet(
         }
         templateEngine.getEditScheduleHtml(schedule)
       }
+      path == "/tune/add" -> templateEngine.getAddTuneHtml()
+      path.startsWith("/tune/update/") -> {
+        val tune = lookupTune(path)
+        if (tune == null) {
+          res.sendError(HttpServletResponse.SC_NOT_FOUND)
+          return
+        }
+        templateEngine.getEditTuneHtml(tune)
+      }
       path == "/ring" -> templateEngine.getRingHtml()
       path == "/config" -> templateEngine.getConfigHtml()
       else -> templateEngine.getHomeHtml()
@@ -70,4 +82,7 @@ class HtmlServlet(
 
   private fun lookupSchedule(path: String): Schedule? =
     pathUtil.parseIdFromPathSuffix(path)?.let { scheduleManager.getSchedule(it) }
+
+  private fun lookupTune(path: String): Tune? =
+    pathUtil.parseIdFromPathSuffix(path)?.let { tuneManager.getTune(it) }
 }

@@ -36,6 +36,7 @@ import towerbell.configuration.ConfigurationManager;
 import towerbell.configuration.SilenceManager;
 import towerbell.ringer.BellRinger;
 import towerbell.schedule.ScheduleManager;
+import towerbell.tune.TuneManager;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -44,7 +45,10 @@ public class WebServerThread extends Server {
   public static final String AUTH_REALM = "TowerBellRealm";
   public static final String[] AUTH_ROLE = new String[] { "user" };
 
-  public WebServerThread(Proto.FixedConfig fixedConfig, ScheduleManager scheduleManager,
+  public WebServerThread(
+      Proto.FixedConfig fixedConfig,
+      ScheduleManager scheduleManager,
+      TuneManager tuneManager,
       ConfigurationManager configurationManager, BellRinger bellRinger,
       SilenceManager silenceManager) throws IOException {
     super(fixedConfig.getServerPort());
@@ -60,7 +64,7 @@ public class WebServerThread extends Server {
     context.addServlet(staticHolder, "/static/*");
 
     ServletHolder htmlServlet = new ServletHolder(
-        new HtmlServlet(fixedConfig, scheduleManager, configurationManager, silenceManager));
+        new HtmlServlet(fixedConfig, scheduleManager, tuneManager, configurationManager, silenceManager));
     context.addServlet(htmlServlet, "/");
     context.addServlet(htmlServlet, "/add");
     context.addServlet(htmlServlet, "/ring");
