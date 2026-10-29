@@ -1,0 +1,150 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html lang="en">
+<head>
+  <title>$TITLE</title>
+  <link rel="icon" href="/static/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+  <link rel="stylesheet" href="/static/common.css">
+  <script src="/static/xhr.js"></script>
+</head>
+<body>
+
+$HEADER
+
+<form>
+  <div style="display: flex; flex-direction: column; width: fit-content; padding-left: 3em;">
+    <h2>$ADD_OR_EDIT Tune</h2>
+
+    <div class="table" style="margin-bottom: 2em;">
+      <div class="row header">
+        <div class="cell"><label for="tunename">Tune Name</label></div>
+      </div>
+      <div class="cell">
+        <input id="tunename" name="tunename" type="text" min="0" max="12" class="inputbox"
+               style="width: 20ch;">
+      </div>
+    </div>
+
+    <span style="display: flex; justify-content: center; margin-bottom: 5px;">
+      Tempo
+    </span>
+
+    <div class="table" style="margin-bottom: 2em;">
+      <div class="row header">
+        <div class="cell"><label for="temponotevalue">Tempo Note Value</label></div>
+        <div class="cell"><label for="beatsperminute">Beats Per Minute</label></div>
+      </div>
+
+      <div class="row footer">
+        <div class="cell">
+          <select
+              id="temponotevalue" name="temponotevalue" class="inputbox">
+            <option value="16">Sixteenth</option>
+            <option value="8">Eighth</option>
+            <option value="4">Quarter</option>
+            <option value="2">Half</option>
+            <option value="1">Whole</option>
+          </select>
+        </div>
+
+        <div class="cell">
+          <input id="beatsperminute" name="beatsperminute" type="number" min="0" max="999" class="inputbox"
+                 style="width: 5ch;">
+        </div>
+      </div>
+    </div>
+
+    <div class="table" style="margin-bottom: 2em;">
+      <div class="row header">
+        <div class="cell"><label for="keysignaturenote">Key Signature</label></div>
+      </div>
+
+      <div class="row footer">
+        <div class="cell">
+          <select
+              id="keysignaturenote" name="keysignaturenote" class="inputbox">
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="G">G</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+          </select>
+
+          <select
+              id="keysignatureaccidental" name="keysignatureaccidental" class="inputbox">
+            <option value=""></option>
+            <option value="flat">-flat</option>
+            <option value="sharp">-sharp</option>
+          </select>
+
+          <select
+              id="keysignaturemode" name="keysignaturemode" class="inputbox">
+            <option value="major">major</option>
+            <option value="minor">minor</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="table" style="margin-bottom: 2em;">
+      <div class="row header">
+        <div class="cell"><label for="lilypondrelativenote">Notation Relative Note</label></div>
+      </div>
+      <div class="cell">
+        <input id="lilypondrelativenote" name="lilypondrelativenote" type="text" class="inputbox"
+               style="width: 5ch;">
+      </div>
+    </div>
+
+    <div class="table" style="margin-bottom: 2em;">
+      <div class="row header">
+        <div class="cell"><label for="tunenotes">Tune Notes</label></div>
+      </div>
+      <div class="cell">
+        <textarea id="tunenotes" name="tunenotes" rows="5"></textarea>
+      </div>
+    </div>
+
+    <div class="table">
+      <div class="row footer">
+        <div class="cell errormessage" id="errorMessage"></div>
+      </div>
+      <div class="row footer">
+        <div class="cell">
+          <input type="button" value="Generate Score" class="button" onclick="generateScore();">
+          <span style="padding-left: 3em;">&nbsp;</span>
+          <input type="button" value="$ADD_OR_UPDATE" class="button" onclick="$ADD_OR_UPDATE_FUNCTION_NAME();">
+          <span style="padding-left: 3em;">&nbsp;</span>
+          <input type="button" value="Cancel" class="button" onclick="onCancel();">
+        </div>
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="tuneid" id="tuneid" value="">
+</form>
+
+<script lang="javascript">
+$FINAL_SCRIPT
+</script>
+
+</body>
+</html>

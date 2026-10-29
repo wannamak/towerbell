@@ -62,23 +62,27 @@ public class HtmlServlet extends HttpServlet {
     PrintWriter out = res.getWriter();
     String path = req.getServletPath();
 
-    if (path != null && path.equals("/add")) {
-      out.println(templateEngine.getAddScheduleHtml());
-    } else if (path != null && path.startsWith("/update/")) {
-      Integer scheduleId = pathUtil.parseIdFromPathSuffix(path);
-      Schedule schedule;
-      if (scheduleId == null
-          || (schedule = scheduleManager.getSchedule(scheduleId)) == null) {
-        res.sendError(HttpServletResponse.SC_NOT_FOUND);
-        return;
-      }
-      out.println(templateEngine.getEditScheduleHtml(schedule));
-    } else if (path != null && path.equals("/ring")) {
-      out.println(templateEngine.getRingHtml());
-    } else if (path != null && path.equals("/config")) {
-      out.println(templateEngine.getConfigHtml());
-    } else {
+    if (path == null) {
       out.println(templateEngine.getHomeHtml());
+    } else {
+      if (path.equals("/schedule/add")) {
+        out.println(templateEngine.getAddScheduleHtml());
+      } else if (path.startsWith("/schedule/update/")) {
+        Integer scheduleId = pathUtil.parseIdFromPathSuffix(path);
+        Schedule schedule;
+        if (scheduleId == null
+            || (schedule = scheduleManager.getSchedule(scheduleId)) == null) {
+          res.sendError(HttpServletResponse.SC_NOT_FOUND);
+          return;
+        }
+        out.println(templateEngine.getEditScheduleHtml(schedule));
+      } else if (path.equals("/ring")) {
+        out.println(templateEngine.getRingHtml());
+      } else if (path.equals("/config")) {
+        out.println(templateEngine.getConfigHtml());
+      } else {
+        out.println(templateEngine.getHomeHtml());
+      }
     }
   }
 }

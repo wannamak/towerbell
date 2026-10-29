@@ -35,6 +35,9 @@ class TemplateEngine(
   private val addScheduleReplacements = AddScheduleReplacements(configurationManager)
   private val editScheduleReplacements = EditScheduleReplacements(configurationManager)
 
+  private var tuneTemplate = ""
+  private val addTuneReplacements = AddTuneReplacements()
+
   private var commonReplacements = mapOf<String, String>()
 
   init {
@@ -47,16 +50,20 @@ class TemplateEngine(
   fun getAddScheduleHtml() = expand(scheduleTemplate, addScheduleReplacements.replacements + commonReplacements)
   fun getEditScheduleHtml(schedule: Schedule) = expand(scheduleTemplate,
     editScheduleReplacements.getReplacements(schedule) + commonReplacements)
+  fun getAddTuneHtml() = expand(tuneTemplate, addTuneReplacements.replacements + commonReplacements)
 
   public fun readTemplates() {
     ringTemplate = readFile("ring-template.html")
     configTemplate = readFile("config-template.html")
     homeTemplate = readFile("home-template.html")
     scheduleTemplate = readFile("schedule-template.html")
-    commonReplacements = mapOf("\$HEADER" to expand(readFile("header.inc"),
-      mapOf("" +
-          "\$HEADER_TITLE" to fixedConfig.headerTitle,
-          "\$HEADER_IMAGE_URL" to fixedConfig.headerImageUrl)))
+    tuneTemplate = readFile("tune-template.html")
+    val headerContents = expand(readFile("header.inc"),
+      mapOf(
+        "\$HEADER_TITLE" to fixedConfig.headerTitle,
+        "\$HEADER_IMAGE_URL" to fixedConfig.headerImageUrl))
+    commonReplacements = mapOf("\$HEADER" to headerContents,
+      "\$TITLE" to fixedConfig.headerTitle)
   }
 
   private fun expand(template: String, replacements: Map<String, String>): String {

@@ -22,10 +22,12 @@ CREATE TABLE Tune
   TempoNoteValue INTEGER NOT NULL,
   BeatsPerMinute INTEGER NOT NULL,
   KeySignatureNote VARCHAR(1) NOT NULL CHECK (KeySignatureNote IN ('C', 'D', 'E', 'F', 'G', 'A', 'B')),
-  KeySignatureSuffix VARCHAR(5) NOT NULL CHECK (KeySignatureSuffix IN ('minor', 'major', '')),
+  KeySignatureAccidental VARCHAR(5) NOT NULL CHECK (KeySignatureAccidental IN ('flat', 'sharp', '')),
+  KeySignatureMode VARCHAR(5) NOT NULL CHECK (KeySignatureMode IN ('minor', 'major', '')),
   LilyPondRelativeNote VARCHAR(5),
   TuneNotes VARCHAR(1024) NOT NULL
 );
 
-INSERT INTO Tune (TuneId, TuneName, TempoNoteValue, BeatsPerMinute, KeySignatureNote, KeySignatureSuffix, LilyPondRelativeNote, TuneNotes)
-  VALUES (0, "Westminster First Quarter", 4, 60, "E", "major", "g'", "gs4 fs4 e4 b2.");
+INSERT INTO Tune (TuneId, TuneName, TempoNoteValue, BeatsPerMinute, KeySignatureNote,
+                  KeySignatureAccidental, KeySignatureMode, LilyPondRelativeNote, TuneNotes)
+  VALUES (0, "Westminster First Quarter", 4, 60, "E", "", ""major", "g'", "gs4 fs4 e4 b2.");

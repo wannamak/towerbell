@@ -29,11 +29,11 @@ function onDelete(scheduleId) {
 }
 
 function onUpdate(scheduleId) {
-  location.href = "/update/" + scheduleId;
+  location.href = "/schedule/update/" + scheduleId;
 }
 
 function onAdd() {
-  location.href = "/add";
+  location.href = "/schedule/add";
 }
 
 function onEnableChanged(scheduleId, enableInput) {
