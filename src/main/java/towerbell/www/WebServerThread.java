@@ -36,7 +36,9 @@ import towerbell.configuration.ConfigurationManager;
 import towerbell.configuration.SilenceManager;
 import towerbell.ringer.BellRinger;
 import towerbell.schedule.ScheduleManager;
+import towerbell.tune.RenderCache;
 import towerbell.tune.TuneManager;
+import towerbell.tune.TuneRenderer;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -49,7 +51,10 @@ public class WebServerThread extends Server {
       Proto.FixedConfig fixedConfig,
       ScheduleManager scheduleManager,
       TuneManager tuneManager,
-      ConfigurationManager configurationManager, BellRinger bellRinger,
+      ConfigurationManager configurationManager,
+      BellRinger bellRinger,
+      TuneRenderer tuneRenderer,
+      RenderCache renderCache,
       SilenceManager silenceManager) throws IOException {
     super(fixedConfig.getServerPort());
 
@@ -66,15 +71,11 @@ public class WebServerThread extends Server {
     ServletHolder htmlServlet = new ServletHolder(
         new HtmlServlet(fixedConfig, scheduleManager, tuneManager, configurationManager, silenceManager));
     context.addServlet(htmlServlet, "/");
-    context.addServlet(htmlServlet, "/add");
-    context.addServlet(htmlServlet, "/ring");
-    context.addServlet(htmlServlet, "/settings");
-    context.addServlet(htmlServlet, "/update");
 
     HashLoginService loginService = new HashLoginService(AUTH_REALM);
     context.addServlet(new ServletHolder(
         new ApiServlet(scheduleManager, configurationManager, silenceManager, loginService,
-            bellRinger)),
+            bellRinger, tuneManager, tuneRenderer, renderCache)),
         "/api/*");
 
     // --- Basic auth ---

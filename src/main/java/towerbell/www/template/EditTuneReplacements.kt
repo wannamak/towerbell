@@ -13,6 +13,7 @@ class EditTuneReplacements() {
       "\$ADD_OR_EDIT" to "Edit",
       "\$ADD_OR_UPDATE" to "Update",
       "\$ADD_OR_UPDATE_FUNCTION_NAME" to "onUpdate",
+      "\$RENDERED_IMAGE_TAG" to "<img id='renderedscore' src='/api/tune/render/${tune.tuneId}'>",
       "\$FINAL_SCRIPT" to getFinalScriptForEdit(tune))
 
   private fun getFinalScriptForEdit(tune: Tune): String {

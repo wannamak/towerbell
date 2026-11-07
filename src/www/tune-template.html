@@ -22,6 +22,7 @@
   <link rel="icon" href="/static/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
   <link rel="stylesheet" href="/static/common.css">
+  <script src="/static/tune.js"></script>
   <script src="/static/xhr.js"></script>
 </head>
 <body>
@@ -122,7 +123,12 @@ $HEADER
       </div>
       <div class="row footer">
         <div class="cell center">
-          <input type="button" value="Generate Score" class="button" onclick="generateScore();">
+          <input type="button" value="Generate Score" class="button" onclick="onGenerateScore();">
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="cell center" id="tunescore">
+          $RENDERED_IMAGE_TAG
         </div>
       </div>
     </div>

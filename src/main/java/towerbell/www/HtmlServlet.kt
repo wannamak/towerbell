@@ -38,7 +38,7 @@ class HtmlServlet(
   configurationManager: ConfigurationManager,
   silenceManager: SilenceManager
 ) : HttpServlet() {
-  private val logger: Logger? = Logger.getLogger(HtmlServlet::class.java.name)
+  private val logger: Logger = Logger.getLogger(HtmlServlet::class.java.name)
   private val developmentMode: Boolean = fixedConfig.developmentMode
   private val pathUtil = PathUtil()
   private val templateEngine = TemplateEngine(fixedConfig, scheduleManager, silenceManager, configurationManager)

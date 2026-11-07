@@ -18,6 +18,7 @@
  */
 package towerbell.www;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,7 +35,12 @@ import towerbell.ringer.BellRinger;
 import towerbell.schedule.Schedule;
 import towerbell.schedule.ScheduleFactory;
 import towerbell.schedule.ScheduleManager;
+import towerbell.tune.RenderCache;
+import towerbell.tune.Tune;
+import towerbell.tune.TuneManager;
+import towerbell.tune.TuneRenderer;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -56,31 +62,50 @@ public class ApiServlet extends HttpServlet {
   private final HashLoginService loginService;
   private final BellRinger bellRinger;
   private final ScheduleFactory scheduleFactory;
+  private final TuneManager tuneManager;
+  private final TuneRenderer tuneRenderer;
+  private final RenderCache renderCache;
+
+  private final PathUtil pathUtil = new PathUtil();
+  private final File tempRenderDirectory = new File(System.getProperty("java.io.tmpdir"), "render");
 
   public ApiServlet(
       ScheduleManager scheduleManager,
       ConfigurationManager configurationManager,
       SilenceManager silenceManager,
       HashLoginService loginService,
-      BellRinger bellRinger) {
+      BellRinger bellRinger,
+      TuneManager tuneManager,
+      TuneRenderer tuneRenderer,
+      RenderCache renderCache) {
     this.scheduleManager = scheduleManager;
     this.configurationManager = configurationManager;
     this.silenceManager = silenceManager;
     this.loginService = loginService;
     this.bellRinger = bellRinger;
+    this.tuneRenderer = tuneRenderer;
+    this.tuneManager = tuneManager;
+    this.renderCache = renderCache;
     this.scheduleFactory = new ScheduleFactory();
+  }
+
+  @Override
+  public void init() {
+    tempRenderDirectory.deleteOnExit();
   }
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res)
       throws IOException {
     try {
-      if (req.getPathInfo().equals("/delete")) {
-        handleDelete(req, res);
-      } else if (req.getPathInfo().equals("/add")) {
-        handleAddOrUpdate(req, res, true);
-      } else if (req.getPathInfo().equals("/update")) {
-        handleAddOrUpdate(req, res, false);
+      if (req.getPathInfo().equals("/schedule/delete")) {
+        handleScheduleDelete(req, res);
+      } else if (req.getPathInfo().equals("/schedule/add")) {
+        handleScheduleAddOrUpdate(req, res, true);
+      } else if (req.getPathInfo().equals("/schedule/update")) {
+        handleScheduleAddOrUpdate(req, res, false);
+      } else if (req.getPathInfo().equals("/tune/generate")) {
+        handleGenerateTune(req, res);
       } else if (req.getPathInfo().equals("/ring")) {
         handleRing(req, res);
       } else if (req.getPathInfo().equals("/config")) {
@@ -99,7 +124,28 @@ public class ApiServlet extends HttpServlet {
     }
   }
 
-  private void handleDelete(HttpServletRequest req, HttpServletResponse res) throws IOException {
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse res)
+      throws IOException {
+    if (req.getPathInfo() == null) {
+      res.sendError(HttpServletResponse.SC_NOT_FOUND);
+      return;
+    }
+    if (req.getPathInfo().startsWith("/tune/render/")) {
+      Integer maybeTuneId = pathUtil.parseIdFromPathSuffix(req.getPathInfo());
+      if (maybeTuneId != null) {
+        Tune tune = tuneManager.getTune(maybeTuneId);
+        if (tune != null) {
+          res.setContentType("image/svg+xml;charset=UTF-8");
+          res.getWriter().write(renderCache.render(tune));
+          return;
+        }
+      }
+    }
+    res.sendError(HttpServletResponse.SC_NOT_FOUND);
+  }
+
+  private void handleScheduleDelete(HttpServletRequest req, HttpServletResponse res) throws IOException {
     JSONObject obj = new JSONObject(new JSONTokener(req.getInputStream()));
     int id = obj.getInt("id");
     scheduleManager.deleteSchedule(id);
@@ -121,7 +167,7 @@ public class ApiServlet extends HttpServlet {
     }
   }
 
-  private void handleAddOrUpdate(HttpServletRequest req, HttpServletResponse res,
+  private void handleScheduleAddOrUpdate(HttpServletRequest req, HttpServletResponse res,
       boolean isAdd) throws IOException {
     JSONObject obj = new JSONObject(new JSONTokener(req.getInputStream()));
     ValidationResult<Schedule> validationResult = validateSchedule(obj);
@@ -145,6 +191,22 @@ public class ApiServlet extends HttpServlet {
       String webAuthenticationPassword,
       int ringDurationMillis,
       int defaultSilenceDurationMillis) { }
+
+  private void handleGenerateTune(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    JSONObject obj = new JSONObject(new JSONTokener(req.getInputStream()));
+    Tune tune = new Tune(
+        -1,
+        "unnamed",
+        obj.getNumber("tempoNoteValue").intValue(),
+        obj.getNumber("beatsPerMinute").intValue(),
+        obj.getString("keysignaturenote"),
+        obj.getString("keysignatureaccidental"),
+        obj.getString("keysignaturemode"),
+        obj.getString("lilypondrelativenote"),
+        obj.getString("tunenotes"));
+    res.setContentType("image/svg+xml;charset=UTF-8");
+    res.getWriter().write(tuneRenderer.render(tune, tempRenderDirectory));
+  }
 
   private void handleConfigUpdate(HttpServletRequest req, HttpServletResponse res) throws IOException {
     JSONObject obj = new JSONObject(new JSONTokener(req.getInputStream()));

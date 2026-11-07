@@ -18,7 +18,7 @@
  */
 function onDelete(scheduleId) {
   if (confirm("Are you sure you want to delete this row?")) {
-    sendRequest('POST', '/api/delete', { id: scheduleId }, function(err, response) {
+    sendRequest('POST', '/api/schedule/delete', { id: scheduleId }, function(err, response) {
       if (err) {
         console.error('Error:', err);
       } else {

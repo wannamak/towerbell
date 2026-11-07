@@ -83,11 +83,11 @@ function onSilenceChanged(silence) {
 }
 
 function onAdd() {
-  onAddOrUpdate('/api/add');
+  onAddOrUpdate('/api/schedule/add');
 }
 
 function onUpdate() {
-  onAddOrUpdate('/api/update');
+  onAddOrUpdate('/api/schedule/update');
 }
 
 function onAddOrUpdate(url) {

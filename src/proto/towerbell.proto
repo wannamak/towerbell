@@ -52,6 +52,10 @@ message FixedConfig {
   optional string header_title = 12;
 
   optional string header_image_url = 13;
+
+  optional string rendered_score_directory = 14;
+
+  optional string lilypond = 15;
 }
 
 message OutputConfiguration {
