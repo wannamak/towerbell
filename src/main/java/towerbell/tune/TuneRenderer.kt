@@ -38,12 +38,12 @@ class TuneRenderer(val fixedConfig: Proto.FixedConfig) {
         bookTitleMarkup = ##f
         scoreTitleMarkup = ##f
       }
-      
+
       global = {
         \key ${tune.keySignatureNote.lowercase()}${keyModifier} \${tune.keySignatureMode}
         \time 4/${tune.tempoNoteValue}
       }
-      
+
       \new Staff {
         \global
         \relative ${tune.lilyPondRelativeNote} {
@@ -60,7 +60,7 @@ class TuneRenderer(val fixedConfig: Proto.FixedConfig) {
       "-dno-point-and-click",
       "-dcrop",
       "-o", outputPathWithoutSuffix.absolutePathString(),
-      "-",  // stdin input
+      "-",
     )
       .redirectErrorStream(true)
       .start()
@@ -76,13 +76,13 @@ class TuneRenderer(val fixedConfig: Proto.FixedConfig) {
     }
     if (process.exitValue() != 0) {
       logger.warning("lilypond failed:\n$log")
-    }
+    } else {
+      val svg = outputPathWithoutSuffix.resolveSibling("${outputPathWithoutSuffix.fileName}.svg")
+      val croppedSvg = outputPathWithoutSuffix.resolveSibling("${outputPathWithoutSuffix.fileName}.cropped.svg")
 
-    val svg = outputPathWithoutSuffix.resolveSibling("${outputPathWithoutSuffix.fileName}.svg")
-    val croppedSvg = outputPathWithoutSuffix.resolveSibling("${outputPathWithoutSuffix.fileName}.cropped.svg")
-
-    if (croppedSvg.exists()) {
-      croppedSvg.moveTo(svg, overwrite = true)
+      if (croppedSvg.exists()) {
+        croppedSvg.moveTo(svg, overwrite = true)
+      }
     }
   }
 }
